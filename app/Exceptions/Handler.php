@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Utils\Format;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -50,6 +51,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // 
+        //    return response()->json( Format::api([],$exception->getMessage(),400) );
+        // 
         return parent::render($request, $exception);
     }
 }

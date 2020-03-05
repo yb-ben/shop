@@ -1,0 +1,26 @@
+select * from `shop_goods_category` where `id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
+insert into `shop_goods_category` (`parent_id`, `name`, `status`, `sort`, `path`, `updated_at`, `created_at`) values (?, ?, ?, ?, ?, ?, ?)
+select * from `shop_goods_category` where `shop_goods_category`.`id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
+select * from `shop_goods_category` where `shop_goods_category`.`id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
+update `shop_goods_category` set `name` = ?, `shop_goods_category`.`updated_at` = ? where `id` = ?
+select * from `shop_goods_category` where `shop_goods_category`.`id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
+update `shop_goods_category` set `name` = ?, `shop_goods_category`.`updated_at` = ? where `id` = ?
+select * from `shop_goods_category` where `id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
+insert into `shop_goods_category` (`parent_id`, `name`, `status`, `sort`, `path`, `updated_at`, `created_at`) values (?, ?, ?, ?, ?, ?, ?)
+select * from `shop_goods_category` where `id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
+insert into `shop_goods_category` (`parent_id`, `name`, `status`, `sort`, `path`, `updated_at`, `created_at`) values (?, ?, ?, ?, ?, ?, ?)
+select * from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null
+SELECT 1
+SELECT 1
+select * from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null
+SELECT 1
+SELECT 1
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc

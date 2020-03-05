@@ -15,22 +15,24 @@ class GoodsCategory extends Base{
 
     
 
-    public function create($data,$pid = 0){
-
+    public function add($data){
+        $pid = intval($data['parent_id']);
         if($pid){
-            $parent = $this->field('id,path')->find($pid);
+            
+            $parent = $this->where('id',$pid)->first();
             if($parent){
-                return parent::create(array_merge($data,['parent_id' => $pid,'path' => $parent->path.'-'.$pid]));
+                return static::create(array_merge($data,['parent_id' => $data['parent_id'],'path' => $parent->path.'-'.$data['parent_id']]));
             }
+            
             throw new \Exception('找不到改父分类');
         }   
-        return parent::create($data);
+        return static::create($data);
     }
 
 
     public function edit($id,$data){
         $model = $this->find($id);
-        $model->fill($data);
+        $model->fill($data)->save();
         return $model;
     }
 
