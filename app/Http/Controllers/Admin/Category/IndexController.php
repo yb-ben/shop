@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin\Category;
 
 use App\Http\Controllers\Controller;
+use App\Http\Logic\Category\IndexLogic;
 use App\model\GoodsCategory;
 use App\Utils\Format;
+use App\Utils\Response;
 use Huyibin\Struct\Tree;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,7 @@ class IndexController extends Controller{
         $data = $model->orderby('sort')->select(['id','name','sort','parent_id','status'])->get()->toArray();
         $data = Tree::tree($data,[],'parent_id','children');
         
-        return response()->json(Format::api(array_values($data)));
+        return Response::api(array_values($data));
     }
 
 
@@ -26,35 +28,35 @@ class IndexController extends Controller{
     public function add(Request $request){
 
         $data = $request->post();
-        
-        $model = new GoodsCategory;
+       // dump($data);exit;
+        $model = new IndexLogic;
         $model = $model->add($data);
-        return response()->json(Format::api($model));
+        return Response::api($model);
     }
 
     //编辑保存
     public function edit(Request $request,$id){
 
         $data = $request->post();
-        $model = new GoodsCategory;
+        $model = new IndexLogic;
         $model = $model->edit($id,$data);
-        return response()->json(Format::api($model));
+        return Response::api($model);
     }
 
     //删除
     public function delete($id){
 
         if(GoodsCategory::where('parent_id',$id)->count()){
-            return response()->json(Format::api());    
+            return Response::apiError();    
         }
         GoodsCategory::find($id)->delete();
-        return response()->json(Format::api());    
+        return Response::api();    
     }
 
     //详情
     public function detail($id){
 
         $model = GoodsCategory::find($id);
-        return response()->json(Format::api($model));    
+        return Response::api($model);    
     }
 }

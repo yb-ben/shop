@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        file_put_contents(__DIR__.'/sql_listener.log','');
         DB::listen(function($query){
             
             file_put_contents(__DIR__.'/sql_listener.log',$query->sql.PHP_EOL,FILE_APPEND);
