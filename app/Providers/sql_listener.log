@@ -1,5 +1,0 @@
-select * from `shop_goods_category` where `id` = ? and `shop_goods_category`.`deleted_at` is null limit 1
-insert into `shop_goods_category` (`parent_id`, `name`, `status`, `sort`, `path`, `updated_at`, `created_at`) values (?, ?, ?, ?, ?, ?, ?)
-insert into `shop_category_attr` (`name`, `cate_id`, `updated_at`, `created_at`) values (?, ?, ?, ?)
-insert into `shop_category_attr` (`name`, `cate_id`, `updated_at`, `created_at`) values (?, ?, ?, ?)
-insert into `shop_category_attr` (`name`, `cate_id`, `updated_at`, `created_at`) values (?, ?, ?, ?)

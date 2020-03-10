@@ -16,4 +16,10 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::delete('/delete/{id}','IndexController@delete');//删除
         Route::get('/detail/{id}','IndexController@detail');
     });
+
+
+    Route::group(['prefix' => 'upload','namespace'=>'Upload'],function(){
+        //文件上传
+        Route::post('/uploadImage','IndexController@uploadImage');//图片上传
+    });
 });

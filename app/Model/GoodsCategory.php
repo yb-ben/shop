@@ -10,7 +10,7 @@ class GoodsCategory extends Base{
 
     protected $table = 'goods_category';
 
-    protected $fillable = ['name','parent_id','path','status','sort','remark','crate_at','update_at','delete_at'];
+    protected $fillable = ['name','parent_id','path','status','sort','remark','created_at','updated_at','deleted_at'];
    //protected $guarded = ['id'];
 
     
