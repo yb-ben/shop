@@ -12,11 +12,11 @@ class AttrController extends Controller
 {
 
     //属性列表
-    function list($cate_id) {
+    function list($id) {
 
-        $cate = GoodsCategory::select(['id', 'parent_id', 'path'])->find($cate_id);
+        $cate = GoodsCategory::select(['id'])->findOrFail($id);
 
-        $cateList = CategoryAttr::where('cate_id', $cate->id)->get();
+        $cateList = CategoryAttr::where('cate_id', $cate->id)->where('status',1)->select(['id','name'])->get();
 
         return Response::api($cateList);
     }

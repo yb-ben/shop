@@ -15,8 +15,16 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::post('/edit/{id}','IndexController@edit');//修改
         Route::delete('/delete/{id}','IndexController@delete');//删除
         Route::get('/detail/{id}','IndexController@detail');
+
+        Route::get('/attrs/{id}','AttrController@list');//分类下属性
     });
 
+
+    Route::group(['prefix'=>'goods','namespace' => 'Goods'],function(){
+        //商品管理
+        Route::post('/add','IndexController@add');//添加商品
+        Route::get('/list','IndexController@list');//商品列表
+    });
 
     Route::group(['prefix' => 'upload','namespace'=>'Upload'],function(){
         //文件上传
