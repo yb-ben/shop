@@ -1,2 +1,1 @@
-select count(*) as aggregate from `shop_goods` where `shop_goods`.`deleted_at` is null
-select `id`, `title`, `price`, `line_price`, `count`, `status`, `main_image`, `updated_at` from `shop_goods` where `shop_goods`.`deleted_at` is null order by `sort` asc, `updated_at` desc limit 10 offset 0
+select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
