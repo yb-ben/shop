@@ -12,11 +12,12 @@ class WebHooksController extends Controller{
 
     public function onPush(Request $request){
         $target = base_path();
-        $data = $request->post();
-        $token = env('WEBHOOkS_TOKEN');
 
-        if(!isset($data['token']) || $data['token'] !== $token ){
-            Log::info('webhooks token not equals',['value' => $data['token'],'expect' => $token]);
+        $token = env('WEBHOOkS_TOKEN');
+        $signature = "sha1=".hash_hmac('sha1', $request->getContent(),$token );
+
+        if(strcmp($signature, $request->header('X-Hub-Signature')) != 0){
+            Log::info('signature invalid');
             return 'false';
         }
         exec('git pull',$output,$ret);
