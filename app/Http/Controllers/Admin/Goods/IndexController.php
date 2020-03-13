@@ -46,9 +46,12 @@ class IndexController extends Controller{
         ->orderby('sort')
         ->orderby('updated_at','desc')
         ->paginate($request->input('limit',10,'intval'))
-        ->setAppends(['main_image_full'])
-        ->toArray()
         ;
+        foreach($data as $item){
+            $item->setAppends(['main_image_full']);
+        }
+        $data = $data->toArray();
+
         return Response::api($data);
     }
 
