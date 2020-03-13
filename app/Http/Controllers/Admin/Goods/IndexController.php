@@ -44,14 +44,14 @@ class IndexController extends Controller{
 
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
         ->where(function($query)use($request){
-            $status = $request->get('status',-1);
+            $status = intval($request->get('status',-1));
             if($status !== -1){
                 $query->where('status',$status);
             }
         })
         ->orderby('sort')
         ->orderby('updated_at','desc')
-        ->paginate($request->input('limit',10,'intval'))
+        ->paginate($request->input('limit',10))
         ;
         foreach($data as $item){
             $item->setAppends(['main_image_full','status_text']);
@@ -59,6 +59,19 @@ class IndexController extends Controller{
         $data = $data->toArray();
 
         return Response::api($data);
+    }
+
+
+    /**
+     * 商品详情
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function detail($id){
+
+        $goods = Goods::find($id);
+        return Response::api($goods);
     }
 
 }

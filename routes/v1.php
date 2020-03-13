@@ -24,6 +24,7 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         //商品管理
         Route::post('/add','IndexController@add');//添加商品
         Route::get('/list','IndexController@list');//商品列表
+        Route::get('/detail/{id}','IndexController@detail');//商品详情
     });
 
     Route::group(['prefix' => 'upload','namespace'=>'Upload'],function(){

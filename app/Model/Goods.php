@@ -43,4 +43,25 @@ class Goods extends Base{
     public function getMainImageFullAttribute(){
         return env('APP_URL').$this->main_image;
     }
+
+
+    public function category(){
+        return $this->belongsTo(GoodsCategory::class,'cate_id');
+    }
+
+    public function gallery(){
+        return $this->hasMany(GoodsGallery::class,'goods_id');
+    }
+
+    public function content(){
+        return $this->hasOne(GoodsContent::class,'goods_id');
+    }
+
+    public function specs(){
+        return $this->hasMany(GoodsSpec::class,'goods_id');
+    }
+
+    public function values(){
+        return $this->hasMany(GoodsValue::class,'goods_id');
+    }
 }

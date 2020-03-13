@@ -93,4 +93,10 @@ class IndexLogic extends Logic
         });
     }
 
+
+    public function detail($id){
+
+        return Goods::with([ 'spec','gallery','content'])->find($id);
+
+    }
 }
