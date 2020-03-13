@@ -43,12 +43,18 @@ class IndexController extends Controller{
     public function list(Request $request){
 
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
+        ->where(function($query)use($request){
+            $status = $request->get('status',-1);
+            if($status !== -1){
+                $query->where('status',$status);
+            }
+        })
         ->orderby('sort')
         ->orderby('updated_at','desc')
         ->paginate($request->input('limit',10,'intval'))
         ;
         foreach($data as $item){
-            $item->setAppends(['main_image_full']);
+            $item->setAppends(['main_image_full','status_text']);
         }
         $data = $data->toArray();
 
