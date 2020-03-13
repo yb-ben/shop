@@ -41,6 +41,6 @@ class Goods extends Base{
     }
 
     public function getMainImageFullAttribute(){
-        return env('APP_URL').$this->main_iamge;
+        return env('APP_URL').$this->main_image;
     }
 }
