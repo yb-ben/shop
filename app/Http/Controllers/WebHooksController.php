@@ -11,7 +11,7 @@ class WebHooksController extends Controller{
 
 
     public function onPush(Request $request){
-        $target = app_path();
+        $target = base_path();
         $data = $request->post();
         exec('git pull',$output,$ret);
         Log::info('github event',$data);
