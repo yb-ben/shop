@@ -18,7 +18,7 @@ class WebHooksController extends Controller{
 
     protected function config(){
         $this->target = base_path();
-        $this->token = env('WEBHOOkS_TOKEN');     
+        $this->token = env('WEBHOOKS_SECRET');     
 
         if(empty($this->token))
             throw new \Exception('未设置webhooks_token');
