@@ -104,10 +104,11 @@ class IndexLogic extends Logic
             ])
             ->select(['id','title','main_image','status','price','line_price','cate_id','count'])
             ->find($id);
+            $goods->setAppends(['main_image_full']);
             foreach($goods->gallery as $gallery){
                 $gallery->setAppends(['img_full']);
             }
-            
+
         return $goods;
     }
 }
