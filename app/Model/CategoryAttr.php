@@ -14,6 +14,9 @@ class CategoryAttr extends Base{
     //protected $guarded = ['id'];
 
 
+    public function values(){
 
+        return $this->hasMany(GoodsValue::class,'attr_id');
+    }
 
 }

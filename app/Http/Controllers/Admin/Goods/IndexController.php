@@ -38,6 +38,19 @@ class IndexController extends Controller{
     }
 
     /**
+     * 修改商品
+     *
+     * @return void
+     */
+    public function edit(Request $request){
+
+        $data = $request->post();
+        $logic = new IndexLogic;
+        $logic->edit($data);
+        return Response::api();
+    }
+
+    /**
      * 商品列表
      */
     public function list(Request $request){

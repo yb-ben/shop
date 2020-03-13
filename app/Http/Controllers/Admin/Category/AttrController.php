@@ -16,7 +16,7 @@ class AttrController extends Controller
 
         $cate = GoodsCategory::select(['id'])->findOrFail($id);
 
-        $cateList = CategoryAttr::where('cate_id', $cate->id)->where('status',1)->select(['id','name'])->get();
+        $cateList = CategoryAttr::with(['values'])->where('cate_id', $cate->id)->where('status',1)->select(['id','name'])->get();
 
         return Response::api($cateList);
     }

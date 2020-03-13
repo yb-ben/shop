@@ -94,6 +94,15 @@ class IndexLogic extends Logic
     }
 
 
+    public function edit($data){
+        return DB::transaction(function()use($data){
+
+
+
+        });
+    }
+
+
     public function detail($id){
 
         $goods =  Goods::with([ 
@@ -108,7 +117,7 @@ class IndexLogic extends Logic
             foreach($goods->gallery as $gallery){
                 $gallery->setAppends(['img_full']);
             }
-
+      //  $goods->content = $goods->content->content;
         return $goods;
     }
 }
