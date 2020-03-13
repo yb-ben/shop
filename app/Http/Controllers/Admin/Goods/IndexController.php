@@ -69,8 +69,10 @@ class IndexController extends Controller{
      * @return void
      */
     public function detail($id){
+            
+        $goodsLogic = new IndexLogic;
 
-        $goods = Goods::find($id);
+        $goods = $goodsLogic->detail($id);
         return Response::api($goods);
     }
 
