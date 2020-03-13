@@ -32,7 +32,7 @@ class WebHooksController extends Controller{
             Log::info('signature invalid');
             return 'false';
         }
-        exec('git pull',$output,$ret);
+        exec("cd {$this->target} && exec git pull",$output,$ret);
         Log::info("cd {$this->target} && exec git pull",['output' => $output,'ret' => $ret]);
         return 'ok';
     }
