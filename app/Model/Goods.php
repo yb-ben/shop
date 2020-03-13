@@ -40,7 +40,7 @@ class Goods extends Base{
         return $this->attributes['updated_time'] = strtotime($this->updated_at);
     }
 
-    public function getMainImageFullAttribte(){
+    public function getMainImageFullAttribute(){
         return env('APP_URL').$this->main_iamge;
     }
 }
