@@ -45,6 +45,7 @@ class IndexController extends Controller{
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
         ->orderby('sort')
         ->orderby('updated_at','desc')
+        ->setAppends(['main_image_full'])
         ->paginate($request->input('limit',10,'intval'))
         ->toArray()
         ;

@@ -13,7 +13,8 @@ class Goods extends Base{
     
     protected $fillable = ['title','price','main_image','line_price','sell','spec_set','status','cate_id','sort','created_at','updated_at','deleted_at'];
    // protected $appends = ['status_text','updated_time'];
-
+ 
+    
 
     public function getStatusTextAttribute(){
         $ret = '';
@@ -39,4 +40,7 @@ class Goods extends Base{
         return $this->attributes['updated_time'] = strtotime($this->updated_at);
     }
 
+    public function getMainImageFullAttribte(){
+        return env('APP_URL').$this->main_iamge;
+    }
 }
