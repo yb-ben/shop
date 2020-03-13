@@ -1,1 +1,0 @@
-select `id`, `name`, `sort`, `parent_id`, `status` from `shop_goods_category` where `shop_goods_category`.`deleted_at` is null order by `sort` asc
