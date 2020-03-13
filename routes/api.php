@@ -20,5 +20,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([ 'prefix' =>'webhooks'],function(){
 
-    Route::post('/onpush','WebhooksController@onPush');
+    Route::post('/onpush','WebHooksController@onPush');
 });
