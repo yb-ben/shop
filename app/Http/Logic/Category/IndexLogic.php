@@ -3,8 +3,8 @@
 
 namespace App\Http\Logic\Category;
 
-use App\model\CategoryAttr;
-use App\model\GoodsCategory;
+use App\Model\CategoryAttr;
+use App\Model\GoodsCategory;
 use Exception;
 use Illuminate\Support\Facades\DB;
 

@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin\Category;
 
 use App\Http\Controllers\Controller;
 use App\Http\Logic\Category\IndexLogic;
-use App\model\GoodsCategory;
-use App\Utils\Format;
+use App\Model\GoodsCategory;
 use App\Utils\Response;
 use Huyibin\Struct\Tree;
 use Illuminate\Http\Request;
