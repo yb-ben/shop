@@ -14,4 +14,8 @@ class GoodsContent extends Base{
     public function setContentAttribute($value){
         $this->attributes['content'] = htmlspecialchars($value);
     }
+
+    public function getContentAttribute($value){
+        return html_entity_decode($value);
+    }
 }

@@ -10,4 +10,8 @@ class GoodsGallery extends Base{
     protected $table = 'goods_gallery';
     protected $fillable = ['goods_id','img'];
  
+
+    public function getImgFullAttribute(){
+        return env('APP_URL').$this->img;
+    }
 }

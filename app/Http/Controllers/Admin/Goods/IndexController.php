@@ -73,6 +73,7 @@ class IndexController extends Controller{
         $goodsLogic = new IndexLogic;
 
         $goods = $goodsLogic->detail($id);
+
         return Response::api($goods);
     }
 

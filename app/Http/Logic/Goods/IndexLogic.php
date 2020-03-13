@@ -96,11 +96,18 @@ class IndexLogic extends Logic
 
     public function detail($id){
 
-        return Goods::with([ 
+        $goods =  Goods::with([ 
             'specs',
             'gallery',
             'content',
-            'values'])->select(['id','title','main_image','status','price','line_price','cate_id','count'])->find($id);
-
+            'values'
+            ])
+            ->select(['id','title','main_image','status','price','line_price','cate_id','count'])
+            ->find($id);
+            foreach($goods->gallery as $gallery){
+                $gallery->setAppends(['img_full']);
+            }
+            
+        return $goods;
     }
 }
