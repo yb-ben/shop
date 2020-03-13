@@ -16,7 +16,7 @@ class IndexController extends Controller{
     public function tree(){
 
         $model = new GoodsCategory;
-        $data = $model->orderby('sort')->select(['id','name','sort','parent_id','status'])->get()->toArray();
+        $data = $model->orderby('sort')->select(['id','name','sort','parent_id','status','path'])->get()->toArray();
         $data = Tree::tree($data,[],'parent_id','children');
         
         return Response::api(array_values($data));
