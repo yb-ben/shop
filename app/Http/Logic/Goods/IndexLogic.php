@@ -159,12 +159,12 @@ class IndexLogic extends Logic
                     if (!empty($sku)) {
                        GoodsSpec::insert($sku);
                     }                
-                    $goods->specs->delete();
+                    $goods->specs->destory();
                 }
             }else{
 
-                $goods->specs->delete();
-                $goods->values->delete();
+                $goods->specs->destory();
+                $goods->values->destory();
             }
 
             //图片添加
@@ -198,7 +198,7 @@ class IndexLogic extends Logic
         }
         count($m) && GoodsGallery::insert($m);
         if($isUpdate){
-            $goods->gallery->delete();
+            $goods->gallery->destory();
         }
     }
 
