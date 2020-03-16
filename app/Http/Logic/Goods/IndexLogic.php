@@ -131,6 +131,7 @@ class IndexLogic extends Logic
                         }
                     }
                 }            
+                dump($avs);
                 if (!empty($avs)) {
 
                     GoodsValue::where('goods_id',$goods->id)->delete();
@@ -156,10 +157,12 @@ class IndexLogic extends Logic
                         }                 
                         $sku[] = ['spu' =>rtrim($spustr, ',') , 'goods_id' => $goods->id, 'count' => $item['count'], 'price' => $item['price'], 'line_price' => $item['line_price'],'created_at' => $time,'updated_at' => $time];
                     }
+                    dump($sku);
+                    
+                    $goods->specs()->delete();
                     if (!empty($sku)) {
                        GoodsSpec::insert($sku);
                     }                
-                    $goods->specs()->delete();
                 }
             }else{
 
