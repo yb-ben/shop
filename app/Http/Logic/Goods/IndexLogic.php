@@ -99,8 +99,8 @@ class IndexLogic extends Logic
         return DB::transaction(function()use($data){
 
    
-            //$goods = Goods::with(['content','gallery'])->findOrFail($data['id']);
-            $goods = $this->detail($data['id']);
+            $goods = Goods::with(['content'])->findOrFail($data['id']);
+          
             $goods->title = $data['title'];
             $goods->main_image = $data['main_image'];
             $goods->price = $data['price'];
@@ -159,12 +159,12 @@ class IndexLogic extends Logic
                     if (!empty($sku)) {
                        GoodsSpec::insert($sku);
                     }                
-                    $goods->specs->destory();
+                    $goods->specs()->delete();
                 }
             }else{
 
-                $goods->specs->destory();
-                $goods->values->destory();
+                $goods->specs()->delete();
+                $goods->values()->delete();
             }
 
             //图片添加
@@ -196,9 +196,9 @@ class IndexLogic extends Logic
         foreach($insert as $i){
             $m[] = ['goods_id' => $goods->id,'img' => $i['url']];
         }
-        count($m) && GoodsGallery::insert($m);
+        count($m) && $goods->gallery()->createMany($m);
         if($isUpdate){
-            $goods->gallery->destory();
+            $goods->gallery()->delete();
         }
     }
 
