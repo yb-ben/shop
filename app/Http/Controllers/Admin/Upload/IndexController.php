@@ -21,7 +21,7 @@ class IndexController extends Controller{
             return Response::apiError('上传文件无效');    
         }
         $path =  $file->store('images');
-        return Response::api(['path' => $path]);
+        return Response::api(['path' => $path,'path_full' => env('APP_URL'.$path)]);
     }
 
     //多图片上传

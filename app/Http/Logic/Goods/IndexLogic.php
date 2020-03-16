@@ -81,13 +81,14 @@ class IndexLogic extends Logic
 
             
             }
-            if (count($data['mImage']) > 0){
-                $m = [];
-                foreach($data['mImage'] as $i){
-                    $m[] = ['goods_id' => $goods->id,'img' => $i];
-                }
-                GoodsGallery::insert($m);
-            }
+            // if (count($data['mImage']) > 0){
+            //     $m = [];
+            //     foreach($data['mImage'] as $i){
+            //         $m[] = ['goods_id' => $goods->id,'img' => $i];
+            //     }
+            //     GoodsGallery::insert($m);
+            // }
+            $this->saveGallery($data['mImage'],$goods);
             GoodsContent::create(['goods_id' => $goods->id,'content' => $data['content']]);
             return true;
         });
@@ -106,133 +107,76 @@ class IndexLogic extends Logic
             $goods->line_price = $data['line_price'];
             $goods->count = $data['count'];
             $goods->cate_id = $data['cate_id'];
+            $goods->content->content = $data['content'];
             $goods->save();
+            $goods->content->save();
+
 
             if (!empty($data['attrValues'])) {
-                $goodsCategory = GoodsCategory::select(['id', 'status'])->findOrFail($data['cate_id']);
-                $categoryAttrs = CategoryAttr::where('cate_id', $goodsCategory->id)->select(['id', 'name'])->get();
+                $goodsCategory = GoodsCategory::select(['id', 'status'])->findOrFail($data['cate_id']);//分类
+                $categoryAttrs = CategoryAttr::where('cate_id', $goodsCategory)->select(['id', 'name'])->get(); //属性
 
                 $avs = [];
                 $time = time();
                 
-                //插入spu属性   
+                //插入属性   
                 foreach ($categoryAttrs as $item) {
                     foreach ($data['attrValues'] as $a) {
                         if ($item->id == $a['id']) {
                             if (isset($a['values']) && !empty($a['values'])) {
-
                                 foreach ($a['values'] as $value) {
-
                                     $avs[] = ['goods_id' => $goods->id, 'val' => $value, 'attr_id' => $a['id'],'created_at' => $time,'updated_at' => $time];
-
                                 }
-
                             }
                         }
                     }
-                }
-
-               
-                if (count($avs) > 0) {
+                }            
+                if (!empty($avs)) {
 
                     GoodsValue::where('goods_id',$goods->id)->delete();
                     GoodsValue::insert($avs);
-                    $goodsValue = GoodsValue::where('goods_id',$goods->id)->select(['id','attr_id','val'])->get();
-
-                    
+                    $goodsValue = GoodsValue::where('goods_id',$goods->id)->select(['id','attr_id','val'])->get();    
                     //插入sku
                     $sku = [];
 
                     foreach ($data['sku'] as $item) {
-                        $flag = 1; $spustr = '';
+                        
+                        $spustr = '';
                         foreach ($categoryAttrs as $ca) {
                             //检查属性是否遗漏
                             if (!isset($item[$ca->id])) {
-                                $flag = 0;
-                                break;
-                            } else {
-                                foreach ($goodsValue as $gv) {
-                                    if ($gv->attr_id === $ca->id && $gv->val === $item[$ca->id]) {
-                                        $spustr .= "{$ca->id}:{$gv->val},";
-                                        break;
-                                    }
+                                throw new \Exception('未选择属性：'.$ca->val);
+                            } 
+                            foreach ($goodsValue as $gv) {
+                                if ($gv->attr_id === $ca->id && $gv->val === $item[$ca->id]) {
+                                    $spustr .= "{$ca->id}:{$gv->val},";
+                                    break;
                                 }
-                            }
-                        }
-                        if ($flag) {
-                         
-                            $sku[] = ['spu' =>rtrim($spustr, ',') , 'goods_id' => $goods->id, 'count' => $item['count'], 'price' => $item['price'], 'line_price' => $item['line_price'],'created_at' => $time,'updated_at' => $time];
-                        }
+                            }                              
+                        }                 
+                        $sku[] = ['spu' =>rtrim($spustr, ',') , 'goods_id' => $goods->id, 'count' => $item['count'], 'price' => $item['price'], 'line_price' => $item['line_price'],'created_at' => $time,'updated_at' => $time];
                     }
-                    if (count($sku) > 0) {
-                       // GoodsSpec::insert($sku);
-                       $specs = GoodsSpec::where('goods_id',$goods->id)->get();
-                       if(empty($specs)){
-                        GoodsSpec::insert($sku);
-                       }else{
-                           $insert = [];
-                           foreach($sku as $s){
-                               $flag = 0;
-                                foreach($specs as $k => $spec){
-                                    if($spec->spu === $s['spu']){
-                                        $spec->fill($s);
-                                        $spec->save();
-                                        $flag = 1;
-                                        unset($specs[$k]);
-                                        break;
-                                    }
-                                }
-                                if(!$flag){
-                                    $insert[] = $s;
-                                }
-                            }
-                            $keys =$specs->modelKeys();
-                            if(!empty($keys)){
-                                GoodsSpec::destroy($keys);
-                            }
-                            if(!empty($insert)){
-                                GoodsSpec::insert($insert);
-                            }
-                       }
-                      
-                    }
+                    if (!empty($sku)) {
+                       GoodsSpec::insert($sku);
+                    }                
+                    $goods->specs->delete();
                 }
-
-            
             }else{
-                // GoodsSpec::where('goods_id',$goods->id)->delete();
-                // GoodsValue::where('goods_id',$goods->id)->delete();
+
                 $goods->specs->delete();
                 $goods->values->delete();
             }
-            if (count($data['mImage']) > 0){
-                $m = [];   $n = [];
-                foreach($data['mImage'] as $i){
-                    if(!isset($i['id'])){
-                        //新增图片
-                        $m[] = ['goods_id' => $goods->id,'img' => $i['url']];
-                    }else{
-                        $n[] = $i['id'];
-                    }
-                }
-                foreach($goods->gallery as $g){
-                    if(!in_array($g->id,$n)){
-                        //删除
-                        $g->delete();
-                    }
-                }
 
-                GoodsGallery::insert($m);
-            }else{
-                $goods->gallery->delete();
-            }
-            $goods->content->content = $data['content'];
-            $goods->content->save();
+            //图片添加
+            $this->saveGallery($data['mImage'],$goods,true);
+            
+          
             return true;
         });
     }
 
 
+    //商品详情
     public function detail($id,$field = ['id','title','main_image','status','price','line_price','cate_id','count'],$with = []){
         
         $goods =  Goods::with(array_merge([ 
@@ -243,10 +187,19 @@ class IndexLogic extends Logic
         ],$with))
             ->select($field)
             ->findOrFail($id);
-     
-        
-
-      //  $goods->content = $goods->content->content;
         return $goods;
     }
+
+
+    //保存图集
+    protected function saveGallery($insert,$goods,$isUpdate = false){
+        foreach($insert['mImage'] as $i){
+            $m[] = ['goods_id' => $goods->id,'img' => $i['url']];
+        }
+        count($m) && GoodsGallery::insert($m);
+        if($isUpdate){
+            $goods->gallery->delete();
+        }
+    }
+
 }
