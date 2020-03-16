@@ -98,7 +98,7 @@ class IndexLogic extends Logic
         return DB::transaction(function()use($data){
 
 
-            $goods = Goods::findOrFail($data['id']);
+            $goods = Goods::with(['content'])->findOrFail($data['id']);
             $goods->title = $data['title'];
             $goods->main_image = $data['main_image'];
             $goods->price = $data['price'];
@@ -211,9 +211,8 @@ class IndexLogic extends Logic
             }else{
                 GoodsGallery::where('goods_id',$goods->id)->delete();
             }
-            $goodsContent = GoodsContent::where('goods_id',$goods->id)->first();
-            $goodsContent->content = $data['content'];
-            $goodsContent->save();
+            $goods->content->content = $data['content'];
+            $goods->content->save();
             return true;
         });
     }
