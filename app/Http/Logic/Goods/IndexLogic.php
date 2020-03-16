@@ -115,7 +115,7 @@ class IndexLogic extends Logic
 
             if (!empty($data['attrValues'])) {
                 $goodsCategory = GoodsCategory::select(['id', 'status'])->findOrFail($data['cate_id']);//分类
-                $categoryAttrs = CategoryAttr::where('cate_id', $goodsCategory)->select(['id', 'name'])->get(); //属性
+                $categoryAttrs = CategoryAttr::where('cate_id', $goodsCategory->id)->select(['id', 'name'])->get(); //属性
 
                 $avs = [];
                 $time = time();
