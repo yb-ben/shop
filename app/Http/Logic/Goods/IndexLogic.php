@@ -109,7 +109,8 @@ class IndexLogic extends Logic
             'specs',
             'gallery',
             'content',
-            'values'
+            'values',
+            'category.attrs'
             ])
             ->select(['id','title','main_image','status','price','line_price','cate_id','count'])
             ->find($id);
