@@ -110,7 +110,7 @@ class IndexLogic extends Logic
             'gallery',
             'content',
             'values',
-            'category.attrs'
+           
             ])
             ->select(['id','title','main_image','status','price','line_price','cate_id','count'])
             ->find($id);
@@ -118,6 +118,21 @@ class IndexLogic extends Logic
             foreach($goods->gallery as $gallery){
                 $gallery->setAppends(['img_full']);
             }
+           $attrs = CategoryAttr::where('cate_id',$goods->cate_id)->select(['id','name'])->get()->toArray();
+           $attrs = array_column($attrs,null,'id');
+            
+           $map = [];
+            foreach($goods->values as $v){
+                $map[$v->id] = $v->val;
+            }
+            $spuVal = [];
+          foreach($goods->specs as $spec){
+              foreach($spec->spu as $k => $v){
+                $spuVal[$attrs[$k]['name']] = $map[$v]; 
+              }
+              $goods->spuVal = $spuVal;
+            }
+
       //  $goods->content = $goods->content->content;
         return $goods;
     }
