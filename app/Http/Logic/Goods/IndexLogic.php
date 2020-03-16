@@ -193,7 +193,7 @@ class IndexLogic extends Logic
 
     //保存图集
     protected function saveGallery($insert,$goods,$isUpdate = false){
-        foreach($insert['mImage'] as $i){
+        foreach($insert as $i){
             $m[] = ['goods_id' => $goods->id,'img' => $i['url']];
         }
         count($m) && GoodsGallery::insert($m);
