@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Goods;
 use App\Http\Controllers\Controller;
 use App\Http\Logic\Goods\IndexLogic;
 use App\Http\Requests\StoreGoodsPost;
+use App\Model\CategoryAttr;
 use App\Model\Goods;
 use App\Utils\Response;
 use Illuminate\Http\Request;
@@ -86,7 +87,13 @@ class IndexController extends Controller{
         $goodsLogic = new IndexLogic;
 
         $goods = $goodsLogic->detail($id);
-
+        $goods->setAppends(['main_image_full']);
+        foreach($goods->gallery as $gallery){
+            $gallery->setAppends(['img_full']);
+        }
+       $attrs = CategoryAttr::where('cate_id',$goods->cate_id)->select(['id','name'])->get()->toArray();
+       $attrs = array_column($attrs,null,'id');
+        
         return Response::api($goods);
     }
 

@@ -97,8 +97,9 @@ class IndexLogic extends Logic
     public function edit($data){
         return DB::transaction(function()use($data){
 
-
-            $goods = Goods::with(['content'])->findOrFail($data['id']);
+   
+            //$goods = Goods::with(['content','gallery'])->findOrFail($data['id']);
+            $goods = $this->detail($data['id']);
             $goods->title = $data['title'];
             $goods->main_image = $data['main_image'];
             $goods->price = $data['price'];
@@ -152,7 +153,7 @@ class IndexLogic extends Logic
                             } else {
                                 foreach ($goodsValue as $gv) {
                                     if ($gv->attr_id === $ca->id && $gv->val === $item[$ca->id]) {
-                                        $spustr .= "{$ca->id}:{$gv->id},";
+                                        $spustr .= "{$ca->id}:{$gv->val},";
                                         break;
                                     }
                                 }
@@ -199,17 +200,31 @@ class IndexLogic extends Logic
 
             
             }else{
-                GoodsSpec::where('goods_id',$goods->id)->delete();
-                GoodsValue::where('goods_id',$goods->id)->delete();
+                // GoodsSpec::where('goods_id',$goods->id)->delete();
+                // GoodsValue::where('goods_id',$goods->id)->delete();
+                $goods->specs->delete();
+                $goods->values->delete();
             }
             if (count($data['mImage']) > 0){
-                $m = [];
+                $m = [];   $n = [];
                 foreach($data['mImage'] as $i){
-                    $m[] = ['goods_id' => $goods->id,'img' => $i];
+                    if(!isset($i['id'])){
+                        //新增图片
+                        $m[] = ['goods_id' => $goods->id,'img' => $i['url']];
+                    }else{
+                        $n[] = $i['id'];
+                    }
                 }
+                foreach($goods->gallery as $g){
+                    if(!in_array($g->id,$n)){
+                        //删除
+                        $g->delete();
+                    }
+                }
+
                 GoodsGallery::insert($m);
             }else{
-                GoodsGallery::where('goods_id',$goods->id)->delete();
+                $goods->gallery->delete();
             }
             $goods->content->content = $data['content'];
             $goods->content->save();
@@ -218,24 +233,17 @@ class IndexLogic extends Logic
     }
 
 
-    public function detail($id){
-
-        $goods =  Goods::with([ 
+    public function detail($id,$field = ['id','title','main_image','status','price','line_price','cate_id','count'],$with = []){
+        
+        $goods =  Goods::with(array_merge([ 
             'specs',
             'gallery',
             'content',
             'values',
-           
-            ])
-            ->select(['id','title','main_image','status','price','line_price','cate_id','count'])
-            ->find($id);
-            $goods->setAppends(['main_image_full']);
-            foreach($goods->gallery as $gallery){
-                $gallery->setAppends(['img_full']);
-            }
-           $attrs = CategoryAttr::where('cate_id',$goods->cate_id)->select(['id','name'])->get()->toArray();
-           $attrs = array_column($attrs,null,'id');
-            
+        ],$with))
+            ->select($field)
+            ->findOrFail($id);
+     
         
 
       //  $goods->content = $goods->content->content;
