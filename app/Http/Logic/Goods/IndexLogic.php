@@ -64,7 +64,7 @@ class IndexLogic extends Logic
                             } else {
                                 foreach ($goodsValue as $gv) {
                                     if ($gv->attr_id === $ca->id && $gv->val === $item[$ca->id]) {
-                                        $spustr .= "{$ca->id}:{$gv->id},";
+                                        $spustr .= "{$ca->id}:{$gv->val},";
                                         break;
                                     }
                                 }
