@@ -107,7 +107,7 @@ class IndexLogic extends Logic
             $goods->cate_id = $data['cate_id'];
             $goods->save();
 
-            if (count($data['attrValues'])>0) {
+            if (!empty($data['attrValues'])) {
                 $goodsCategory = GoodsCategory::select(['id', 'status'])->findOrFail($data['cate_id']);
                 $categoryAttrs = CategoryAttr::where('cate_id', $goodsCategory->id)->select(['id', 'name'])->get();
 
