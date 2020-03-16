@@ -18,8 +18,8 @@ class GoodsSpec extends Base{
         $spus = explode(',',$value);
         $ret = [];
         foreach($spus as $spu){
-            list($attr_id,$value_id) = explode(':',$spu);
-            $ret[$attr_id] = $value_id;
+            list($attr,$value) = explode(':',$spu);
+            $ret[$attr] = $value;
         }
         return $ret;
     }
