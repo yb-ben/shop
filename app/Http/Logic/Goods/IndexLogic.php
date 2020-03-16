@@ -96,8 +96,9 @@ class IndexLogic extends Logic
 
 
     public function edit($data){
+    
         return DB::transaction(function()use($data){
-
+            ob_start();
    
             $goods = Goods::with(['content'])->findOrFail($data['id']);
           
@@ -131,7 +132,7 @@ class IndexLogic extends Logic
                         }
                     }
                 }            
-              //  dump($avs);
+                dump($avs);
                 if (!empty($avs)) {
 
                     GoodsValue::where('goods_id',$goods->id)->delete();
@@ -157,7 +158,7 @@ class IndexLogic extends Logic
                         }                 
                         $sku[] = ['spu' =>rtrim($spustr, ',') , 'goods_id' => $goods->id, 'count' => $item['count'], 'price' => $item['price'], 'line_price' => $item['line_price'],'created_at' => $time,'updated_at' => $time];
                     }
-                   // dump($sku);
+                   dump($sku);
                     
                     $goods->specs()->delete();
                     if (!empty($sku)) {
@@ -173,7 +174,7 @@ class IndexLogic extends Logic
             //图片添加
             $this->saveGallery($data['mImage'],$goods,true);
             
-          
+        
             return true;
         });
     }
