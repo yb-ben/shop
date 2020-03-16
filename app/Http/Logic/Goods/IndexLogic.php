@@ -211,7 +211,7 @@ class IndexLogic extends Logic
             }else{
                 GoodsGallery::where('goods_id',$goods->id)->delete();
             }
-            $goodsContent = GoodsContent::where('goods_id',$goods->id)->find();
+            $goodsContent = GoodsContent::where('goods_id',$goods->id)->first();
             $goodsContent->content = $data['content'];
             $goodsContent->save();
             return true;
