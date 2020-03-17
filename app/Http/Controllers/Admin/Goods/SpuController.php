@@ -13,7 +13,7 @@ class SpuController extends Controller{
 
     //属性列表
     public function attrs(){
-        $attrs= GoodsAttr::select(['id' => 'k_id','name' => 'k'])->all();
+        $attrs= GoodsAttr::select(['id' => 'k_id','name' => 'k'])->get();
         return Response::api( $attrs);
     }
 
@@ -30,7 +30,7 @@ class SpuController extends Controller{
     //属性值列表
     public function values(Request $request){
         $id = $request->input('_id',0);
-        $values = GoodsValue::where('attr_id',$id)->select(['id','val'])->get();
+        $values = GoodsValue::where('attr_id',$id)->select(['id'=>'v_id','val'=>'v'])->get();
         return Response::api($values);
     }
 
