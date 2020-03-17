@@ -14,13 +14,6 @@ class GoodsCategory extends Base{
    //protected $guarded = ['id'];
 
     
-
-    public function attrs(){
-
-        return $this->hasMany(CategoryAttr::class,'cate_id');
-    }
-
-
     public function getPathArrayAttribute(){
 
         if($this->path !== ""){

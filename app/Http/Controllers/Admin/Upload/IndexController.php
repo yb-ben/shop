@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Upload;
 
 use App\Http\Controllers\Controller;
+use App\Model\UploadFile;
 use App\Utils\Response;
 use Illuminate\Http\Request;
 
@@ -20,8 +21,18 @@ class IndexController extends Controller{
         if(!$file->isValid()){
             return Response::apiError('上传文件无效');    
         }
+        
         $path =  $file->store('images');
-        return Response::api(['path' => $path,'path_full' => env('APP_URL').$path]);
+        
+        $uploadFile =UploadFile::create([
+            'filetype' => $file->getMimeType(),
+            'fn' => $file->getFilename(),
+            'size' => $file->getSize(),
+            'url' => $file->getRealPath(),
+            'path' => $path
+        ]);
+
+        return Response::api(['file_id' => $uploadFile->id ,'path' => $path,'path_full' => env('APP_URL').$path]);
     }
 
     //多图片上传

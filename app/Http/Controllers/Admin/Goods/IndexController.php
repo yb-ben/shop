@@ -7,6 +7,9 @@ use App\Http\Logic\Goods\IndexLogic;
 use App\Http\Requests\StoreGoodsPost;
 use App\Model\CategoryAttr;
 use App\Model\Goods;
+use App\Model\GoodsAttr;
+use App\Model\GoodsSpec;
+use App\Model\GoodsValue;
 use App\Utils\Response;
 use Illuminate\Http\Request;
 
@@ -91,10 +94,20 @@ class IndexController extends Controller{
         foreach($goods->gallery as $gallery){
             $gallery->setAppends(['img_full']);
         }
-       $attrs = CategoryAttr::where('cate_id',$goods->cate_id)->select(['id','name'])->get()->toArray();
-       $attrs = array_column($attrs,null,'id');
-        
+
         return Response::api($goods);
     }
+
+
+    //商品sku信息
+    public function getSku($id){
+
+        $goodsSpecs = GoodsSpec::where('goods_id',$id)->get();
+        $goodsAttr = GoodsAttr::where('goods_id',$id)->get();
+        $goodsValues = GoodsValue::where('goods_id',$id)->get();
+
+        return Response::api(['specs' => $goodsSpecs,'attrs'=>$goodsAttr ,'values'=>$goodsValues]);
+    }
+
 
 }

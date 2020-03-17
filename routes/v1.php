@@ -15,8 +15,18 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::post('/edit/{id}','IndexController@edit');//修改
         Route::delete('/delete/{id}','IndexController@delete');//删除
         Route::get('/detail/{id}','IndexController@detail');
+    });
 
-        Route::get('/attrs/{id}','AttrController@list');//分类下属性
+    
+
+
+
+    Route::group(['prefix'=>'spu','namespace' => 'Goods'],function(){
+        //spu管理
+        Route::post('/addAttr','SpuController@addAttr');//添加属性
+        Route::get('/attrs','SpuController@attrs');//属性列表
+        Route::get('/values','SpuController@values');//属性值列表
+        Route::post('/addValue','SpuController@addValue');//添加属性值
     });
 
 

@@ -8,7 +8,7 @@ class GoodsGallery extends Base{
     public $timestamps = false;
 
     protected $table = 'goods_gallery';
-    protected $fillable = ['goods_id','img'];
+    protected $fillable = ['goods_id','url','file_id'];
  
 
     public function getImgFullAttribute(){
