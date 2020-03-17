@@ -26,10 +26,9 @@ class IndexController extends Controller{
         
         $uploadFile =UploadFile::create([
             'filetype' => $file->getMimeType(),
-            'fn' => $file->getFilename(),
+            'fn' => substr($path,strrpos($path,'/')),
             'size' => $file->getSize(),
-            'url' => $file->getRealPath(),
-            'path' => $path
+            'url' => $path,
         ]);
 
         return Response::api(['file_id' => $uploadFile->id ,'path' => $path,'path_full' => env('APP_URL').$path]);
