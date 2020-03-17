@@ -10,7 +10,7 @@ class UploadFile extends Base{
 
     protected $table = 'upload_file';
 
-    protected $fillable = ['filetype','fn','size','url','ext','created_at','updated_at','deleted_at'];
+    protected $fillable = ['filetype','fn','size','url','ext','path','created_at','updated_at','deleted_at'];
    //protected $guarded = ['id'];
 
     
