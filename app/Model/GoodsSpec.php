@@ -10,7 +10,7 @@ class GoodsSpec extends Base{
     use SoftDeletes;
 
     protected $table = 'goods_spec';
-    protected $fillable = ['goods_id','spu','count','cost','code','sell','lock','weight','created_at','updated_at','deleted_at'];
+    protected $fillable = ['goods_id','sku','count','cost','code','sell','lock','weight','created_at','updated_at','deleted_at'];
  
    
 

@@ -13,7 +13,7 @@ class SpuController extends Controller{
 
     //属性列表
     public function attrs(){
-        $attrs= GoodsAttr::select(['id','name'])->all();
+        $attrs= GoodsAttr::select(['id' => 'k_id','name' => 'k'])->all();
         return Response::api( $attrs);
     }
 

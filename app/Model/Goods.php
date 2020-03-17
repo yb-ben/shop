@@ -11,7 +11,7 @@ class Goods extends Base{
 
     protected $table = 'goods';
     
-    protected $fillable = ['title','price','main_image','line_price','sell','spec_set','status','cate_id','sort','created_at','updated_at','deleted_at'];
+    protected $fillable = ['title','price','file_id','spu','code','lock','how','main_image','line_price','sell','status','cate_id','sort','created_at','updated_at','deleted_at'];
    // protected $appends = ['status_text','updated_time'];
  
     
@@ -61,7 +61,5 @@ class Goods extends Base{
         return $this->hasMany(GoodsSpec::class,'goods_id');
     }
 
-    public function values(){
-        return $this->hasMany(GoodsValue::class,'goods_id');
-    }
+  
 }

@@ -26,7 +26,7 @@ class IndexController extends Controller{
         
         $uploadFile =UploadFile::create([
             'filetype' => $file->getMimeType(),
-            'fn' => substr($path,strrpos($path,'/')),
+            'fn' => substr($path,strrpos($path,'/')+1),
             'size' => $file->getSize(),
             'url' => $path,
         ]);
