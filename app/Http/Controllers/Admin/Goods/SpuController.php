@@ -13,8 +13,8 @@ class SpuController extends Controller{
 
     //属性列表
     public function attrs(){
-        $attrs= GoodsAttr::all();
-        return Response::api(['attrs' => $attrs]);
+        $attrs= GoodsAttr::select(['id','name'])->all();
+        return Response::api( $attrs);
     }
 
     //添加属性
@@ -29,13 +29,13 @@ class SpuController extends Controller{
 
     //属性值列表
     public function values(Request $request){
-        $data = $request->input();
-        $values = GoodsValue::where('attr_id',$data['_id'])->all();
+        $id = $request->input('_id',0);
+        $values = GoodsValue::where('attr_id',$id)->select(['id','val'])->all();
         return Response::api($values);
     }
 
     //添加属性值
-    public function addValues(Request $request){
+    public function addValue(Request $request){
         $data = $request->post();
         $values = GoodsValue::create([
             'val' => $data['val'],
