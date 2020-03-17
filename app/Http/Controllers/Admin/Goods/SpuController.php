@@ -30,7 +30,7 @@ class SpuController extends Controller{
     //属性值列表
     public function values(Request $request){
         $id = $request->input('_id',0);
-        $values = GoodsValue::where('attr_id',$id)->select(['id','val'])->all();
+        $values = GoodsValue::where('attr_id',$id)->select(['id','val'])->get();
         return Response::api($values);
     }
 
