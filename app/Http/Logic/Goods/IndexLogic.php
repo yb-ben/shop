@@ -32,12 +32,15 @@ class IndexLogic extends Logic
             $goods->cate_id = $goodsCategory->id;
             $goods->code = $data['code'];
             $goods->how = $data['how'];
+            $goodsContent = GoodsContent::create(['content' => $data['content']?:'']);
+            $goods->content_id = $goodsContent->id;
             $goods->save();
         
         
             //保存属性 和 属性值
+            $insertSpecs = [];
             foreach($data['spec'] as $spec){
-                GoodsSpec::create([
+                $insertSpecs[] = [
                     'spu' => $spec['spu'],
                     'count' => $spec['count'],
                     'price' => $spec['price'],
@@ -45,12 +48,11 @@ class IndexLogic extends Logic
                     'cost' => $spec['cost'],
                     'code' => $spec['code'],
                     'goods_id' => $goods->id
-                ]);
+                ];
             }
-            
+            $goods->specs()->createMany($insertSpecs);
 
             $this->saveGallery($data['mImage'],$goods);
-            GoodsContent::create(['goods_id' => $goods->id,'content' => $data['content']?:'']);
             return true;
         });
     }
@@ -73,24 +75,27 @@ class IndexLogic extends Logic
             $goods->how = $data['how'];
             $goods->save();
         
-
             //保存属性 和 属性值
             GoodsSpec::where('goods_id',$goods->id)->delete();
+            $insertSpecs = [];
             foreach($data['spec'] as $spec){
-                GoodsSpec::create([
-                    'sku' => $spec['sku'],
+                $insertSpecs[] = [
+                    'spu' => $spec['spu'],
                     'count' => $spec['count'],
                     'price' => $spec['price'],
                     'weight' => $spec['weight'],
                     'cost' => $spec['cost'],
                     'code' => $spec['code'],
                     'goods_id' => $goods->id
-                ]);
+                ];
             }
+            $goods->specs()->createMany($insertSpecs);
             
             //图片添加
             $this->saveGallery($data['mImage'],$goods,true);
         
+            $goods->content->content = $data['content'];
+            $goods->content->save();
             return true;
         });
     }
