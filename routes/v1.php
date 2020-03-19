@@ -41,5 +41,6 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
     Route::group(['prefix' => 'upload','namespace'=>'Upload'],function(){
         //文件上传
         Route::post('/uploadImage','IndexController@uploadImage');//图片上传
+        Route::get('/imageList','IndexController@imageList');//图片列表
     });
 });

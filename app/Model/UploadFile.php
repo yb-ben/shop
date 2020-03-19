@@ -15,6 +15,8 @@ class UploadFile extends Base{
 
     
 
- 
+   public function getUrlFullAttribute(){
+    return env('APP_URL').$this->url;
+}
     
 }

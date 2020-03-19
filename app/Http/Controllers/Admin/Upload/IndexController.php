@@ -39,4 +39,17 @@ class IndexController extends Controller{
 
     }
 
+
+    //图片选择
+    public function imageList(Request $request){
+        $img = UploadFile::whereIn('type',['image/jpeg'])
+        ->select(['id','url'])
+        ->paginate($request->input('limit',10));
+
+        foreach($img as $i){
+            $i->setAppends(['url_full']);
+        }
+        Response::api($img);
+    }
+
 }
