@@ -49,7 +49,7 @@ class IndexController extends Controller{
         foreach($img as $i){
             $i->setAppends(['url_full']);
         }
-        Response::api($img);
+        return Response::api($img);
     }
 
 }
