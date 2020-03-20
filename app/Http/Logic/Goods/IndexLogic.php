@@ -42,8 +42,8 @@ class IndexLogic extends Logic
         
         
             //保存属性 和 属性值
-            $this->saveSPU($goods,$data);
-            $this->saveSKU($goods,$data);
+            $this->saveSPU($goods,$data['spu']);
+            $this->saveSKU($goods,$data['sku']);
 
             $this->saveGallery($data['mImage'],$goods);
             return true;
