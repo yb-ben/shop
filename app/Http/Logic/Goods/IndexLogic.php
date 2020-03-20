@@ -97,7 +97,7 @@ class IndexLogic extends Logic
 
 
     //商品详情
-    public function detail($id,$field = ['id','title','main_image','status','price','line_price','cate_id','count','spu'],$with = []){
+    public function detail($id,$field = ['id','title','main_image','status','price','line_price','cate_id','count','spu','content_id'],$with = []){
         
         $goods =  Goods::with(array_merge([ 
             'gallery',
