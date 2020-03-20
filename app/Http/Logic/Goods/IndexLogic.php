@@ -108,14 +108,14 @@ class IndexLogic extends Logic
 
 
     //保存图集
-    protected function saveGallery($insert,$goods,$isUpdate = false){
-   
+    protected function saveGallery($data,$goods,$isUpdate = false){
+        
         if($isUpdate){
             $goods->gallery()->delete();
         }
-        if(!empty($insert)){
-            foreach($insert as $i){
-                $m[] = ['goods_id' => $goods->id,'url' => $i['url'],'file_id' => $insert['file_id'] ];
+        if(!empty($data)){
+            foreach($data as $i){
+                $m[] = ['goods_id' => $goods->id,'url' => $i['url'],'file_id' => $data['file_id'] ];
             }
             count($m) && $goods->gallery()->createMany($m);    
         }
