@@ -173,7 +173,7 @@ class IndexLogic extends Logic
                 $t['sku'] = json_encode($i);
                 $d[] = $t;
             }
-            print_r($d);
+         //   print_r($d);
             $goods->specs()->createMany($d);
         }
     }
