@@ -170,7 +170,7 @@ class IndexLogic extends Logic
                     'key' => $i['_id'],
                 ];
                 unset($i['count'],$i['price'],$i['weight'],$i['cast'],$i['code'],$i['_id']);
-                $t['sku'] = json_encode($i);
+                $t['sku'] = json_encode($i,JSON_UNESCAPED_UNICODE);
                 $d[] = $t;
             }
          //   print_r($d);
