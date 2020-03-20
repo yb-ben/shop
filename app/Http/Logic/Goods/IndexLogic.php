@@ -142,7 +142,7 @@ class IndexLogic extends Logic
                     break;
                 }
             }
-            if($flag !== -1){
+            if($flag === -1){
                 $insert[] = $i;
             }
         }
@@ -158,7 +158,6 @@ class IndexLogic extends Logic
                 $goods->specs()->delete($delete);                
             }
         }
-        print_r($insert);
         if(!empty($insert)){
            
             foreach($insert as &$i){
