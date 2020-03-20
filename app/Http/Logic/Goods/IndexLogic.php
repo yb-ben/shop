@@ -127,6 +127,7 @@ class IndexLogic extends Logic
 
     //保存SKU
     protected function saveSKU($goods,$data){
+        ob_start();
         $goods->load('specs');
         $update = [];
         $insert = [];
@@ -159,7 +160,7 @@ class IndexLogic extends Logic
         }
         if(!empty($insert)){
            
-            foreach($insert as $i){
+            foreach($insert as &$i){
                 $t = [
                     'count' => $i['count'],
                     'price' => $i['price'],
@@ -172,6 +173,7 @@ class IndexLogic extends Logic
                 $t['sku'] = json_encode($i);
                 $d[] = $t;
             }
+            print_r($d);
             $goods->specs()->createMany($d);
         }
     }
