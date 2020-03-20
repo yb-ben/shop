@@ -54,7 +54,7 @@ class Goods extends Base{
     }
 
     public function content(){
-        return $this->hasOne(GoodsContent::class,'id','content_id');
+        return $this->hasOne(GoodsContent::class,'content_id','id');
     }
 
     public function specs(){
