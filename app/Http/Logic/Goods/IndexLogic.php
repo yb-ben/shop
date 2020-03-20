@@ -5,6 +5,7 @@ namespace App\Http\Logic\Goods;
 use App\Http\Logic\Logic;
 use App\Model\CategoryAttr;
 use App\Model\Goods;
+use App\Model\GoodsAttr;
 use App\Model\GoodsCategory;
 use App\Model\GoodsContent;
 use App\Model\GoodsGallery;
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 
 class IndexLogic extends Logic
 {
+
+
+
 
     public function add($data)
     {
@@ -38,19 +42,8 @@ class IndexLogic extends Logic
         
         
             //保存属性 和 属性值
-            $insertSpecs = [];
-            foreach($data['spec'] as $spec){
-                $insertSpecs[] = [
-                    'spu' => $spec['spu'],
-                    'count' => $spec['count'],
-                    'price' => $spec['price'],
-                    'weight' => $spec['weight'],
-                    'cost' => $spec['cost'],
-                    'code' => $spec['code'],
-                    'goods_id' => $goods->id
-                ];
-            }
-            $goods->specs()->createMany($insertSpecs);
+            $this->saveSPU($goods,$data);
+            $this->saveSKU($goods,$data);
 
             $this->saveGallery($data['mImage'],$goods);
             return true;
@@ -129,4 +122,60 @@ class IndexLogic extends Logic
        
     }
 
+
+    //保存spu
+    protected function saveSPU($goods,$data){
+        $goods->spu = json_encode($data,JSON_UNESCAPED_UNICODE);
+    }
+
+    //保存SKU
+    protected function saveSKU($goods,$data){
+        $goods->load('specs');
+        $update = [];
+        $insert = [];
+        $delete = [];
+        foreach($data as $i){
+            $flag = -1;
+            foreach($goods->specs as $k => $spec){
+                if($i['_id'] === $spec->k){
+                    $spec->fill($i)->save();
+                    $flag = $k;
+                    $update[$k] = 1;
+                    break;
+                }
+            }
+            if($flag !== -1){
+                $insert[] = $i;
+            }
+        }
+
+        if(!empty($update)){
+            foreach($goods->specs as $k => $s){
+                if(!isset($update[$k])){
+                    $delete[] = $s->id;
+                    continue;
+                }
+            }
+            if(!empty($delete)){
+                $goods->specs()->delete($delete);                
+            }
+        }
+        if(!empty($insert)){
+           
+            foreach($insert as $i){
+                $t = [
+                    'count' => $i['count'],
+                    'price' => $i['price'],
+                    'weight' => $i['weight'],
+                    'cast' => $i['cast'],
+                    'code' => $i['code'],
+                    'key' => $i['_id'],
+                ];
+                unset($i['count'],$i['price'],$i['weight'],$i['cast'],$i['code'],$i['_id']);
+                $t['sku'] = json_encode($i);
+                $d[] = $t;
+            }
+            $goods->specs()->createMany($d);
+        }
+    }
 }
