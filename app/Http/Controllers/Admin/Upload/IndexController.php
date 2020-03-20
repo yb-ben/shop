@@ -43,6 +43,7 @@ class IndexController extends Controller{
     //图片选择
     public function imageList(Request $request){
         $img = UploadFile::select(['id','url','size'])
+        ->orderby('id','desc')
         ->paginate($request->input('limit',10));
 
         foreach($img as $i){
