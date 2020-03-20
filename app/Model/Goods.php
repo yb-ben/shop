@@ -61,5 +61,11 @@ class Goods extends Base{
         return $this->hasMany(GoodsSpec::class,'goods_id');
     }
 
-  
+    public function getSpuAttribute($value){
+        return json_decode($value);
+    }
+
+    public function setSpuAttribute($value){
+        $this->attributes['spu'] = json_encode($value,JSON_UNESCAPED_UNICODE);
+    }
 }

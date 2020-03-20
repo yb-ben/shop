@@ -14,13 +14,11 @@ class GoodsSpec extends Base{
  
    
 
-    public function getSpuAttribute($value){
-        $spus = explode(',',$value);
-        $ret = [];
-        foreach($spus as $spu){
-            list($attr,$value) = explode(':',$spu);
-            $ret[$attr] = $value;
-        }
-        return $ret;
+    public function getSkuAttribute($value){
+        return json_decode($value);
+    }
+
+    public function setSkuAttribute($value){
+        $this->attributes['sku'] = json_encode($value,JSON_UNESCAPED_UNICODE);
     }
 }

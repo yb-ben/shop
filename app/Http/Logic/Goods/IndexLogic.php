@@ -39,7 +39,7 @@ class IndexLogic extends Logic
             $goodsContent = GoodsContent::create(['content' => $data['content']?:'']);
             $goods->content_id = $goodsContent->id;
             
-            !empty($data['spu']) && ($goods->spu = json_encode($data['spu'],JSON_UNESCAPED_UNICODE));
+            !empty($data['spu']) && ($goods->spu = $data['spu']);
             $goods->save();
         
         
@@ -97,11 +97,12 @@ class IndexLogic extends Logic
 
 
     //商品详情
-    public function detail($id,$field = ['id','title','main_image','status','price','line_price','cate_id','count'],$with = []){
+    public function detail($id,$field = ['id','title','main_image','status','price','line_price','cate_id','count','spu'],$with = []){
         
         $goods =  Goods::with(array_merge([ 
             'gallery',
             'content',
+            'specs',
         ],$with))
             ->select($field)
             ->findOrFail($id);
@@ -170,7 +171,7 @@ class IndexLogic extends Logic
                     'key' => $i['_id'],
                 ];
                 unset($i['count'],$i['price'],$i['weight'],$i['cast'],$i['code'],$i['_id']);
-                $t['sku'] = json_encode($i,JSON_UNESCAPED_UNICODE);
+                $t['sku'] = $i;
                 $d[] = $t;
             }
          //   print_r($d);
