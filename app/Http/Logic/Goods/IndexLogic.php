@@ -38,11 +38,13 @@ class IndexLogic extends Logic
             $goods->how = $data['how'];
             $goodsContent = GoodsContent::create(['content' => $data['content']?:'']);
             $goods->content_id = $goodsContent->id;
+            
+            !empty($data['spu']) && ($goods->spu = json_encode($data['spu'],JSON_UNESCAPED_UNICODE));
             $goods->save();
         
         
             //保存属性 和 属性值
-            $this->saveSPU($goods,$data['spu']);
+           
             $this->saveSKU($goods,$data['sku']);
 
             $this->saveGallery($data['mImage'],$goods);
@@ -122,11 +124,6 @@ class IndexLogic extends Logic
        
     }
 
-
-    //保存spu
-    protected function saveSPU($goods,$data){
-        $goods->spu = json_encode($data,JSON_UNESCAPED_UNICODE);
-    }
 
     //保存SKU
     protected function saveSKU($goods,$data){
