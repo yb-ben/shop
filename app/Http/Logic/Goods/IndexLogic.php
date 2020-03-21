@@ -91,25 +91,24 @@ class IndexLogic extends Logic
     //保存图集
     protected function saveGallery($data, $goods, $isUpdate = false)
     {
+        if(!$isUpdate){
 
-        if ($isUpdate) {
-            $goods->load('gallery');
-            foreach($goods->gallery as $g){
-                foreach($data as $k => $v){
-                    if(isset($v['id']) && $g->id === $v['id']){
-                        $g->fill(['goods_id'=>$goods->id,'url' => $v['url'] ,'file_id' => $v['file_id']]);
-                        unset($data[$k]);
-                        break;
-                    }
+            $this->saveOneToMany($data,$goods,'gallery',function($data,$model){
+                foreach ($data as &$i) {
+                    $i['goods_id'] = $model->id;
                 }
-                $g->isDirty() ? $g->save() : $g->delete() ;
-            }
-        }
-        if (!empty($data)) {
-            foreach ($data as $i) {
-                $m[] = ['goods_id' => $goods->id, 'url' => $i['url'], 'file_id' => $data['file_id']];
-            }
-            count($m) && $goods->gallery()->createMany($m);
+                return $data;
+            });
+        }else{
+
+            $this->saveOneToMany($data,$goods,'gallery',function($data,$model){
+                foreach ($data as &$i) {
+                    $i['goods_id'] = $model->id;
+                }
+                return $data;
+            },function($r,$v,$m){
+                $r->fill(['goods_id'=>$m->id,'url' => $v['url'] ,'file_id' => $v['file_id']]);
+            });
         }
 
     }
@@ -120,20 +119,22 @@ class IndexLogic extends Logic
 
         if (!$isUpdate) {
             //新增
-            foreach ($data as &$i) {
-                $t = [
-                    'count' => $i['count'],
-                    'price' => $i['price'],
-                    'weight' => $i['weight'],
-                    'cast' => $i['cast'],
-                    'code' => $i['code'],
-                    'key' => $i['_id'],
-                ];
-                unset($i['count'], $i['price'], $i['weight'], $i['cast'], $i['code'], $i['_id']);
-                $t['sku'] = $i;
-                $d[] = $t;
-            }
-            $goods->specs()->createMany($d);
+            $this->saveOneToMany($data,$goods,'specs',function($data,$model){
+                foreach ($data as &$i) {
+                    $t = [
+                        'count' => $i['count'],
+                        'price' => $i['price'],
+                        'weight' => $i['weight'],
+                        'cast' => $i['cast'],
+                        'code' => $i['code'],
+                        'key' => $i['_id'],
+                    ];
+                    unset($i['count'], $i['price'], $i['weight'], $i['cast'], $i['code'], $i['_id']);
+                    $t['sku'] = $i;
+                    $d[] = $t;
+                }
+                return $d;
+            });
 
         } else {
             //更新
@@ -161,14 +162,14 @@ class IndexLogic extends Logic
 
 
 
-    private function saveOneToMany(Array $data,Model $model,String $ref,\Closure $beforeInsert ,\Closure $updater = null){
+    private function saveOneToMany(Array $data,Model $model,String $ref,\Closure $beforeInsert ,\Closure $updater = null,$pk = 'id'){
 
         if($updater){
             $model->load($ref);
             foreach($model->$ref as $r){
                 $flag = 0;
                 foreach($data as $k => $v){
-                    if(isset($v['id']) && $r->id === $v['id']){
+                    if(isset($v[$pk]) && $r->$pk === $v[$pk]){
                         call_user_func_array($updater,[$r,$v,$model]);
                         unset($data[$k]);
                         $flag = 1;
