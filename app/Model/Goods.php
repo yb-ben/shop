@@ -63,10 +63,13 @@ class Goods extends Base{
 
     public function getSpuAttribute($value){
         $value = json_decode($value,JSON_OBJECT_AS_ARRAY);
-        foreach($value as &$v){
-            if(!empty($v['path'])){
-                $v['path_full'] = env('APP_URL').$v['path'];
-            }
+        foreach($value as &$val){
+            array_walk($val['values'],function($v){
+                if(!empty($v['path'])){
+                    $v['path_full'] = env('APP_URL').$v['path'];
+                }
+            });
+            
         }
         return $value;
     }
