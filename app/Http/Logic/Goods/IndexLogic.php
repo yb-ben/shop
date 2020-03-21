@@ -60,13 +60,16 @@ class IndexLogic extends Logic
            $goods->content->content = $data['content'];
            $goods->content->isDirty('content') && $goods->content->save();
 
-            //保存属性 和 属性值
+           $goods->spu = $data['spu'] ;
 
+           
+           $goods->isDirty() && $goods->save();
+
+            //保存属性 和 属性值
             $this->saveSKU($goods, $data['sku'],true);
 
             $this->saveGallery($data['mImage'], $goods,true);
 
-            $goods->save();
             return true;
         });
     }

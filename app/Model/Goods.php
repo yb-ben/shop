@@ -66,6 +66,7 @@ class Goods extends Base{
     }
 
     public function setSpuAttribute($value){
-        $this->attributes['spu'] = json_encode($value,JSON_UNESCAPED_UNICODE);
+        
+        $this->attributes['spu'] = json_encode(empty($value)?[]:$value,JSON_UNESCAPED_UNICODE);
     }
 }
