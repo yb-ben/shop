@@ -163,14 +163,20 @@ class IndexLogic extends Logic
         if($updater){
             $model->load($ref);
             foreach($model->$ref as $r){
+                $flag = 0;
                 foreach($data as $k => $v){
                     if(isset($v['id']) && $r->id === $v['id']){
                         call_user_func_array($updater,[$r,$v,$model]);
                         unset($data[$k]);
+                        $flag = 1;
                         break;
                     }
                 }
-                $r->isDirty() ? $r->save() : $r->delete();
+                if($r->isDirty()){
+                    $r->save();
+                }else if(!$flag){
+                    $r->delete();
+                }
             }
         }
         if(!empty($data)){
