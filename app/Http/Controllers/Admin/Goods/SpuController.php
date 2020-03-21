@@ -29,8 +29,19 @@ class SpuController extends Controller{
 
     //属性值列表
     public function values(Request $request){
-        $id = $request->input('_id',0);
-        $values = GoodsValue::where('attr_id',$id)->select('id as v_id','val as v')->get();
+ 
+        $values = GoodsValue::where(function($query)use($request){
+            $id = $request->input('_id',0);
+            if($request->has('batch')){
+                $ids = explode(',',$id);
+                $query->whereIn('attr_id',$ids);
+            }else{
+                $query->where('attr_id',$id);
+            }
+
+        })
+        ->select('id as v_id','val as v')
+        ->get();
         return Response::api($values);
     }
 
