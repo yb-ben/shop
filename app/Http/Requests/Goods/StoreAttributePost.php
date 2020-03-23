@@ -7,6 +7,13 @@ use App\Http\Requests\StoreBase;
 class StoreAttributePost extends StoreBase
 {
  
+    protected $rules = [
+
+        'name' => 'required|string|max:10'
+
+    ];
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -14,8 +21,6 @@ class StoreAttributePost extends StoreBase
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return $this->rules;
     }
 }

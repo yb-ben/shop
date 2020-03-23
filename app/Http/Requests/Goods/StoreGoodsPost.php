@@ -29,7 +29,6 @@ class StoreGoodsPost extends StoreBase
             'cate_id' => 'required|integer',
            
             'spu' => [
-                'required',
                 'array'
             ],
             'spu.*.k'=>'required|string',
