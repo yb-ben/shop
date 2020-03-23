@@ -32,11 +32,11 @@ class StoreGoodsPost extends FormRequest
                 'required',
                 'array'
             ],
-            'spu.*.k'=>'requried|string',
-            'spu.*.k_id'=>'requried|integer',
+            'spu.*.k'=>'required|string',
+            'spu.*.k_id'=>'required|integer',
             'spu.*.values' => 'required|array',
-            'spu.*.values.*.v' => 'requried|string',
-            'spu.*.values.*.v_id' => 'requried|integer',
+            'spu.*.values.*.v' => 'required|string',
+            'spu.*.values.*.v_id' => 'required|integer',
             
             'sku' => 'required_with:spu|array',
             'sku.*.price' => 'required|numeric|min:0.01',
@@ -44,7 +44,7 @@ class StoreGoodsPost extends FormRequest
             'sku.*._id' => 'required|string',
             'sku.*.code' => 'required|nullable',
             'sku.*.lock' => 'required|nullable',
-            'sku.*.sell' => 'require|nullable',
+            'sku.*.sell' => 'required|nullable',
             'sku.*.weight' => 'required|integer',
             'sku.*.cast' => 'required|integer',
     ];
