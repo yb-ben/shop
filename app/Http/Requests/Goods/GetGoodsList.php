@@ -23,7 +23,17 @@ class GetGoodsList extends StoreBase
             'page' => 'integer|min:1',
             'status' => [
                 Rule::in([-1,0,1,2])
-            ]
+            ],
+            'kw' => 'string|max:30',
+            'price' => [
+                'array',
+                'size:2',
+                function($attribute,$value,$fails){
+                    
+                }
+            ],
+            'cate_id' =>'integer'
+
         ];
     }
 
