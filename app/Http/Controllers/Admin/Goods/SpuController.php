@@ -22,7 +22,7 @@ class SpuController extends Controller{
     //添加属性
     public function addAttr(StoreAttributePost $request){
         
-        $data = $request->post();
+        $data = $request->validated();
         $attr = GoodsAttr::create([
             'name' =>$data['name']
         ]);
@@ -49,7 +49,7 @@ class SpuController extends Controller{
 
     //添加属性值
     public function addValue(StoreValuesPost $request){
-        $data = $request->post();
+        $data = $request->validated();
         $values = GoodsValue::create([
             'val' => $data['val'],
             'attr_id' =>$data['_id'],

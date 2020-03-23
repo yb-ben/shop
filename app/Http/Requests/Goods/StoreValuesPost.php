@@ -25,10 +25,10 @@ class StoreValuesPost extends StoreBase
      */
     public function rules()
     {
-        $rules = $this->ruels;
+        $rules = $this->rules;
         
         $rules['_id'][] =  function ($attribute, $value, $fail) {
-            GoodsAttr::where('id',$value)->count() || $fail($attribute);
+            GoodsAttr::where('id',$value)->count() || $fail($attribute.' not exists!');
         };
 
         return $rules;
