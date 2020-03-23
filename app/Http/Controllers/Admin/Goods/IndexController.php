@@ -105,7 +105,7 @@ class IndexController extends Controller{
     public function takeUp(ModifyStatus $request){
         $data = $request->validated();
         $logic = new IndexLogic;
-        $logic->batchTakeUp($data);
+        $logic->batchTakeUp($data['ids']);
         return Response::api();
     }
 
@@ -113,7 +113,7 @@ class IndexController extends Controller{
     public function takeDown(ModifyStatus $request){
         $data = $request->validated();
         $logic = new IndexLogic;
-        $logic->batchTakeDown($data);
+        $logic->batchTakeDown($data['ids']);
         return Response::api();
    
     }
