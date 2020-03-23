@@ -161,6 +161,30 @@ class IndexLogic extends Logic
     }
 
 
+    //批量上架
+    public function batchTakeUp($data){
+      
+            $goods = Goods::whereIn('id',$data)->get();
+            foreach($goods as $good){
+                $goods->status = 1;
+                $good->save();
+            }
+          
+     
+    }
+
+    //批量下架
+    public function batchTakeDown($data){
+     
+            $goods = Goods::whereIn('id',$data)->get();
+            foreach($goods as $good){
+                $goods->status = 0;
+                $good->save();
+            }
+        
+     
+    }
+
 
     private function saveOneToMany(Array $data,Model $model,String $ref,\Closure $beforeInsert ,\Closure $updater = null,$pk = 'id'){
 

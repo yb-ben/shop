@@ -35,7 +35,10 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::post('/add','IndexController@add');//添加商品
         Route::get('/list','IndexController@list');//商品列表
         Route::get('/detail/{id}','IndexController@detail');//商品详情
-        Route::post('edit','IndexController@edit');//修改商品
+        Route::post('/edit','IndexController@edit');//修改商品
+        Route::post('/takeUp','IndexController@takeUp');//上架
+        Route::post('/takeDown','IndexController@takeDown');//下架
+
     });
 
     Route::group(['prefix' => 'upload','namespace'=>'Upload'],function(){

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Goods;
 use App\Http\Controllers\Controller;
 use App\Http\Logic\Goods\IndexLogic;
 use App\Http\Requests\Goods\GetGoodsList;
+use App\Http\Requests\Goods\ModifyStatus;
 use App\Http\Requests\Goods\StoreGoodsPost;
 use App\Model\Goods;
 use App\Model\GoodsAttr;
@@ -100,5 +101,20 @@ class IndexController extends Controller{
         return Response::api(['specs' => $goodsSpecs,'attrs'=>$goodsAttr ,'values'=>$goodsValues]);
     }
 
+    //上架
+    public function takeUp(ModifyStatus $request){
+        $data = $request->validated();
+        $logic = new IndexLogic;
+        $logic->batchTakeUp($data);
+        return Response::api();
+    }
 
+    //下架
+    public function takeDown(ModifyStatus $request){
+        $data = $request->validated();
+        $logic = new IndexLogic;
+        $logic->batchTakeDown($data);
+        return Response::api();
+   
+    }
 }
