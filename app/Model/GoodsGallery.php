@@ -11,7 +11,7 @@ class GoodsGallery extends Base{
     protected $fillable = ['goods_id','url','file_id'];
  
 
-    public function getImgFullAttribute(){
-        return env('APP_URL').$this->img;
+    public function getUrlFullAttribute(){
+        return env('APP_URL').$this->url;
     }
 }

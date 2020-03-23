@@ -92,7 +92,7 @@ class IndexController extends Controller{
         $goods = $goodsLogic->detail($id);
         $goods->setAppends(['main_image_full']);
         foreach($goods->gallery as $gallery){
-            $gallery->setAppends(['img_full']);
+            $gallery->setAppends(['url_full']);
         }
 
         return Response::api($goods);
