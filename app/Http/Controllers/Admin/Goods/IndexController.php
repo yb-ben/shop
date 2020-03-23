@@ -23,24 +23,13 @@ class IndexController extends Controller{
      */
     public function add(StoreGoodsPost $request){
 
-        // $validatedData = $request->validate([
-        //     'title' => 'bail|required|max:30',
-        //     'main_image' => 'required',
-        //     'mImage' => 'required|array|max:9',
-        //     'price' => 'required|numeric|min:0.01',
-        //     'line_price' => 'required|numeric|min:0.01',
-        //     'cateId' => 'required',
-        //     'attrValues' => '',
-        //     'sku' => ''
-        // ]);
+      
 
-        //$data =$request->validated();
         $data = $request->validated();
-        ob_start();
-        print_r($data);
-        $logic = new IndexLogic;
-        $logic->add($data);
-        return Response::api();
+       
+         $logic = new IndexLogic;
+         $logic->add($data);
+        return Response::api($data);
     }
 
     /**
@@ -48,9 +37,9 @@ class IndexController extends Controller{
      *
      * @return void
      */
-    public function edit(Request $request){
+    public function edit(StoreGoodsPost $request){
 
-        $data = $request->post();
+        $data = $request->validated();
         $logic = new IndexLogic;
         $logic->edit($data);
         return Response::api();

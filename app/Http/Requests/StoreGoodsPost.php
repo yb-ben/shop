@@ -2,12 +2,57 @@
 
 namespace App\Http\Requests;
 
+use App\Utils\Response;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class StoreGoodsPost extends FormRequest
 {
+
+    protected  $rules = [
+            'title' => 'required|max:30',
+            'price' => 'required|numeric|min:0.01',
+            'line_price' => 'required|numeric|min:0.01',
+            'count' => 'required|integer',
+            'main_image' => 'required|max:255',
+            'mImage' => 'required|array|max:9',
+            'mImage.*.file_id' => 'required|integer',
+            'mImage.*.url' => 'required', 
+            'how' => [
+                'integer',
+                 'in:1,2'
+            ],
+            'file_id' =>  'required|integer',
+            'content' => 'string|nullable',
+            'code' => 'string|nullable',
+            'cate_id' => 'required|integer',
+           
+            'spu' => [
+                'required',
+                'array'
+            ],
+            'spu.*.k'=>'requried|string',
+            'spu.*.k_id'=>'requried|integer',
+            'spu.*.values' => 'required|array',
+            'spu.*.values.*.v' => 'requried|string',
+            'spu.*.values.*.v_id' => 'requried|integer',
+            
+            'sku' => 'required_with:spu|array',
+            'sku.*.price' => 'required|numeric|min:0.01',
+            'sku.*.count' => 'required|integer',
+            'sku.*._id' => 'required|string',
+            'sku.*.code' => 'required|nullable',
+            'sku.*.lock' => 'required|nullable',
+            'sku.*.sell' => 'require|nullable',
+            'sku.*.weight' => 'required|integer',
+            'sku.*.cast' => 'required|integer',
+    ];
+
+
+
+
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,51 +70,22 @@ class StoreGoodsPost extends FormRequest
      */
     public function rules()
     {
-        // return [
-        //     'title' => 'required|max:30',
-        //     'main_image' => 'required',
-        //     'mImage' => 'required|array|max:9',
-        //     'price' => 'required|numeric|min:0.01',
-        //     'line_price' => 'required|numeric|min:0.01',
-        //     'cate_id' => 'required',
-        //     'attrValues' =>[
-        //         'array',
-        //          function($attr,$value, $fail){
-        //              if(!empty($value)){
-        //                 foreach($value as $v){
-        //                     if(!(isset($v['id']) && isset($v['values']) && !empty($v['values']))){
-        //                         $fail($attr,' 参数错误');
-        //                         //return false;
-        //                     }
-        //                 }
-        //              }
-        //         },
-        //     ],
-        //     'sku' => [
-        //         'required_with:attrValues',
-        //         'array',
-        //         function($attr,$value,$fail){
-        //             $attrValues  = $this->post('attrValues');
-        //             $ids = array_column($attrValues,'id');
-        //             foreach($value as $v){
-        //                if( count($v) !==(count($ids) +3)){
-        //                    $fail($attr,' 参数错误');
-        //                     //return false;
-        //                 }
-        //             }
-        //         }
-        //     ],
-        //     'sku.*.price' => 'required|numeric|min:0.01',
-        //     'sku.*.line_price' => 'numeric|min:0.01',
-        //     'sku.*.count' => 'required|integer',
-            
-        // ];
+        $rules = $this->rules;
 
-        return [];
+        return $rules;
     }
 
-    // public function messages()
-    // {
-    //     return [];
-    // }
+    public function messages()
+    {
+        return [
+            'title.required' => 'title不能为空'
+        ];
+    }
+
+
+    public function failedValidation($validator)
+    {
+        $error = $validator->errors()->all();
+        throw new HttpResponseException(Response::apiError($error[0]));
+    }
 }
