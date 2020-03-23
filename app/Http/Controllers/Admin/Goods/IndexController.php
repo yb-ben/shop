@@ -21,7 +21,7 @@ class IndexController extends Controller{
      * @param Request $request
      * @return void
      */
-    public function add(Request $request){
+    public function add(StoreGoodsPost $request){
 
         // $validatedData = $request->validate([
         //     'title' => 'bail|required|max:30',
@@ -35,7 +35,7 @@ class IndexController extends Controller{
         // ]);
 
         //$data =$request->validated();
-        $data = $request->post();
+        $data = $request->validated();
         $logic = new IndexLogic;
         $logic->add($data);
         return Response::api();
