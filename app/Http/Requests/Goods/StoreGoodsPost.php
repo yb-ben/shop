@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Goods;
 
 use App\Utils\Response;
 use Illuminate\Foundation\Http\FormRequest;
@@ -71,16 +71,18 @@ class StoreGoodsPost extends FormRequest
     public function rules()
     {
         $rules = $this->rules;
-
+        if($this->isPost()){
+            $rules['id'] = 'required|integer|min:1';
+        }
         return $rules;
     }
 
-    public function messages()
-    {
-        return [
-            'title.required' => 'title不能为空'
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'title.required' => 'title不能为空'
+    //     ];
+    // }
 
 
     public function failedValidation($validator)

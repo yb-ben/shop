@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin\Goods;
 
 use App\Http\Controllers\Controller;
 use App\Http\Logic\Goods\IndexLogic;
-use App\Http\Requests\StoreGoodsPost;
-use App\Model\CategoryAttr;
+use App\Http\Requests\Goods\StoreGoodsPost;
 use App\Model\Goods;
 use App\Model\GoodsAttr;
 use App\Model\GoodsSpec;
