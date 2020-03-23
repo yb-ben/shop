@@ -4,6 +4,8 @@
 namespace App\Http\Controllers\Admin\Goods;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Goods\StoreAttributePost;
+use App\Http\Requests\Goods\StoreValuesPost;
 use App\Model\GoodsAttr;
 use App\Model\GoodsValue;
 use App\Utils\Response;
@@ -18,7 +20,7 @@ class SpuController extends Controller{
     }
 
     //添加属性
-    public function addAttr(Request $request){
+    public function addAttr(StoreAttributePost $request){
         
         $data = $request->post();
         $attr = GoodsAttr::create([
@@ -46,7 +48,7 @@ class SpuController extends Controller{
     }
 
     //添加属性值
-    public function addValue(Request $request){
+    public function addValue(StoreValuesPost $request){
         $data = $request->post();
         $values = GoodsValue::create([
             'val' => $data['val'],
