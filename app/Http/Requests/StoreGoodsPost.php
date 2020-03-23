@@ -46,7 +46,7 @@ class StoreGoodsPost extends FormRequest
             'sku.*.lock' => 'required|nullable',
             'sku.*.sell' => 'required|nullable',
             'sku.*.weight' => 'required|integer',
-            'sku.*.cast' => 'required|integer',
+            'sku.*.cast' => 'required|numeric|min:0.01',
     ];
 
 
