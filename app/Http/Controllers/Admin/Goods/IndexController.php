@@ -36,6 +36,8 @@ class IndexController extends Controller{
 
         //$data =$request->validated();
         $data = $request->validated();
+        ob_start();
+        print_r($data);
         $logic = new IndexLogic;
         $logic->add($data);
         return Response::api();
