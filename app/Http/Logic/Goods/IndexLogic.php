@@ -164,9 +164,9 @@ class IndexLogic extends Logic
     //批量上架
     public function batchTakeUp($data){
       
-            $goods = Goods::whereIn('id',$data)->get();
+            $goods = Goods::whereIn('id',$data)->select(['id','status'])->get();
             foreach($goods as $good){
-                $goods->status = 1;
+                $good->status = 1;
                 $good->save();
             }
           
@@ -176,9 +176,9 @@ class IndexLogic extends Logic
     //批量下架
     public function batchTakeDown($data){
      
-            $goods = Goods::whereIn('id',$data)->get();
+            $goods = Goods::whereIn('id',$data)->select(['id','status'])->get();
             foreach($goods as $good){
-                $goods->status = 0;
+                $good->status = 0;
                 $good->save();
             }
         
