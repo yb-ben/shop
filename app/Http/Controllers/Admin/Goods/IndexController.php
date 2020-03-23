@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Goods;
 
 use App\Http\Controllers\Controller;
 use App\Http\Logic\Goods\IndexLogic;
+use App\Http\Requests\Goods\GetGoodsList;
 use App\Http\Requests\Goods\StoreGoodsPost;
 use App\Model\Goods;
 use App\Model\GoodsAttr;
@@ -47,7 +48,7 @@ class IndexController extends Controller{
     /**
      * 商品列表
      */
-    public function list(Request $request){
+    public function list(GetGoodsList $request){
 
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
         ->where(function($query)use($request){

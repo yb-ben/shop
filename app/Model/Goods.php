@@ -25,11 +25,11 @@ class Goods extends Base{
             break;
 
             case 1:
-                $ret = '上架中';
+                $ret = '销售中';
             break;
 
             case 2:
-                $ret = '已下架';
+                $ret = '已售罄';
             break;
 
         }
