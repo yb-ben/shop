@@ -71,7 +71,7 @@ class StoreGoodsPost extends FormRequest
     public function rules()
     {
         $rules = $this->rules;
-        if($this->isPost()){
+        if($this->isMethod('post')){
             $rules['id'] = 'required|integer|min:1';
         }
         return $rules;
