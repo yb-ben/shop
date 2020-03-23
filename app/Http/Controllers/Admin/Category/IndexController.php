@@ -13,12 +13,13 @@ class IndexController extends Controller{
 
 
     //分类树
-    public function tree(){
+    public function tree(Request $request){
 
         $model = new GoodsCategory;
         $data = $model->orderby('sort')->select(['id','name','sort','parent_id','status','path'])->get()->toArray();
-        $data = Tree::tree($data,[],'parent_id','children');
-        
+        if('tree' === $request->input('type','tree')){
+            $data = Tree::tree($data,[],'parent_id','children');
+        }
         return Response::api(array_values($data));
     }
 
