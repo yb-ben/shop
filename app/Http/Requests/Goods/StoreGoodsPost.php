@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Goods;
 
+use App\Http\Requests\StoreBase;
 use App\Utils\Response;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
-class StoreGoodsPost extends FormRequest
+
+class StoreGoodsPost extends StoreBase
 {
 
     protected  $rules = [
@@ -53,16 +53,7 @@ class StoreGoodsPost extends FormRequest
 
 
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
+   
     /**
      * Get the validation rules that apply to the request.
      *
@@ -85,9 +76,5 @@ class StoreGoodsPost extends FormRequest
     // }
 
 
-    public function failedValidation($validator)
-    {
-        $error = $validator->errors()->all();
-        throw new HttpResponseException(Response::apiError($error[0]));
-    }
+  
 }
