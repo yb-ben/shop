@@ -28,6 +28,9 @@ class IndexLogic extends Logic
             $goods->how = $data['how'];
             $goodsContent = GoodsContent::create(['content' => $data['content'] ?: '']);
             $goods->content_id = $goodsContent->id;
+            $goods->status = $data['status'];
+            $goods->limit = json_encode($data['limit']);
+            $goods->up_at = $data['up_at'];
 
             !empty($data['spu']) && ($goods->spu = $data['spu']);
             $goods->save();
@@ -75,7 +78,7 @@ class IndexLogic extends Logic
     }
 
     //商品详情
-    public function detail($id, $field = ['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id'], $with = [])
+    public function detail($id, $field = ['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id','limit','up_at'], $with = [])
     {
 
         $goods = Goods::with(array_merge([

@@ -29,7 +29,9 @@ class GetGoodsList extends StoreBase
                 'array',
                 'size:2',
                 function($attribute,$value,$fails){
-                    
+                    if($value[0] > $value[1]){
+                        $fails('invalid price range!');
+                    }
                 }
             ],
             'cate_id' =>'integer'

@@ -11,7 +11,7 @@ class Goods extends Base{
 
     protected $table = 'goods';
     
-    protected $fillable = ['spu','content_id','title','price','file_id','spu','code','lock','how','main_image','line_price','sell','status','cate_id','sort','created_at','updated_at','deleted_at'];
+    protected $fillable = ['up_at','limit','spu','content_id','title','price','file_id','spu','code','lock','how','main_image','line_price','sell','status','cate_id','sort','created_at','updated_at','deleted_at'];
    // protected $appends = ['status_text','updated_time'];
  
     
