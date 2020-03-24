@@ -80,14 +80,11 @@ class IndexLogic extends Logic
     }
 
     //商品详情
-    public function detail($id, $field = ['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id','limit','up_at'], $with = [])
+    public function detail($id, $field = ['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id','limit','up_at']
+    , $with = [ 'gallery', 'content', 'specs'])
     {
 
-        $goods = Goods::with(array_merge([
-            'gallery',
-            'content',
-            'specs',
-        ], $with))
+        $goods = Goods::with($with)
             ->select($field)
             ->findOrFail($id);
         return $goods;
