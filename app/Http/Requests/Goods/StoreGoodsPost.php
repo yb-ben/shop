@@ -11,6 +11,7 @@ class StoreGoodsPost extends StoreBase
 {
 
     protected  $rules = [
+            'id' => 'integer|min:1',
             'title' => 'required|max:30',
             'price' => 'required|numeric|min:0.01',
             'line_price' => 'required|numeric|min:0.01',
@@ -68,9 +69,7 @@ class StoreGoodsPost extends StoreBase
     public function rules()
     {
         $rules = $this->rules;
-        if($this->isMethod('post')){
-            $rules['id'] = 'required|integer|min:1';
-        }
+      
         return $rules;
     }
 
