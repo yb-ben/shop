@@ -32,7 +32,7 @@ class IndexLogic extends Logic
             $goods->limit = json_encode($data['limit']);
             $goods->up_at = $data['up_at'];
 
-            !empty($data['spu']) && ($goods->spu = $data['spu']);
+            $goods->spu = $data['spu'];
             $goods->save();
 
             //保存属性 和 属性值
