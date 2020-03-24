@@ -30,7 +30,7 @@ class StoreGoodsPost extends StoreBase
             'cate_id' => 'required|integer',
             'status' => 'required|in:0,1',
             'up_at' =>'nullable|integer',
-            'limit' => 'array',
+            'limit' => 'nullable|array',
             'limit.0.type' =>'in:0,1',
             'limit.0.count' => 'required_if:limit.0.type,1|integer',
             'limit.0.circle' => 'required_if:limit.0.type,2|in:1,2,3',

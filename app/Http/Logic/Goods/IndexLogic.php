@@ -62,7 +62,9 @@ class IndexLogic extends Logic
 
            $goods->content->content = $data['content'];
            $goods->content->isDirty('content') && $goods->content->save();
-
+           $goods->status = $data['status'];
+           $goods->limit = json_encode($data['limit']);
+           $goods->up_at = $data['up_at'];
            $goods->spu = $data['spu'] ;
 
            
