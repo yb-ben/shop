@@ -80,4 +80,9 @@ class Goods extends Base{
         
         $this->attributes['spu'] = json_encode( (empty($value)?[]:$value),JSON_UNESCAPED_UNICODE);
     }
+
+
+    public function getLimitAttribute($value){
+        return  json_decode($value,JSON_OBJECT_AS_ARRAY);
+    }
 }
