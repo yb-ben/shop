@@ -16,7 +16,7 @@ class StoreGoodsPost extends StoreBase
             'line_price' => 'required|numeric|min:0.01',
             'count' => 'required|integer',
             'main_image' => 'required|max:255',
-            'mImage' => 'required|array|max:9',
+            'mImage' => 'nullable|array|max:9',
             'mImage.*.file_id' => 'required|integer',
             'mImage.*.url' => 'required', 
             'how' => [
