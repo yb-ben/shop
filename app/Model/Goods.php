@@ -62,6 +62,7 @@ class Goods extends Base{
     }
 
     public function getSpuAttribute($value){
+     
         $value = json_decode($value,JSON_OBJECT_AS_ARRAY);
         foreach($value as &$val){
             array_walk($val['values'],function(&$v){
@@ -72,10 +73,11 @@ class Goods extends Base{
             
         }
         return $value;
+   
     }
 
     public function setSpuAttribute($value){
         
-        $this->attributes['spu'] = json_encode(empty($value)?[]:$value,JSON_UNESCAPED_UNICODE);
+        $this->attributes['spu'] = json_encode( (empty($value)?[]:$value),JSON_UNESCAPED_UNICODE);
     }
 }
