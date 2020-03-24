@@ -32,4 +32,9 @@ class Test implements ShouldQueue
         //
         file_put_contents('Job Test run at'. date('Y-m-d').PHP_EOL,FILE_APPEND);
     }
+
+
+    public function tags(){
+        return ['test','test_1'];
+    }
 }
