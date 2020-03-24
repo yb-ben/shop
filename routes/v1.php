@@ -47,3 +47,8 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::get('/imageList','IndexController@imageList');//图片列表
     });
 });
+
+Route::group(['prefix' =>'test'],function(){
+
+    Route::get('/','TestController@index');
+});
