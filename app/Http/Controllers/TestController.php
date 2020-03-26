@@ -11,7 +11,7 @@ class TestController extends Controller{
     public function index(){
 
 
-        Test::dispatch();
+        Test::dispatch()->delay(now()->addSeconds(60));
         return 'ok';
     }
 }
