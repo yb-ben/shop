@@ -3,11 +3,13 @@
 namespace App\Model;
 
 use App\Model\Base;
+use App\Model\Relations\GoodsRelations;
+use App\Model\Scope\GoodsScope;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Goods extends Base{
 
-    use SoftDeletes;
+    use SoftDeletes,GoodsScope,GoodsRelations;
 
     protected $table = 'goods';
     
@@ -45,22 +47,6 @@ class Goods extends Base{
     }
 
 
-    public function category(){
-        return $this->belongsTo(GoodsCategory::class,'cate_id');
-    }
-
-    public function gallery(){
-        return $this->hasMany(GoodsGallery::class,'goods_id');
-    }
-
-    public function content(){
-        return $this->hasOne(GoodsContent::class,'id','content_id');
-    }
-
-    public function specs(){
-        return $this->hasMany(GoodsSpec::class,'goods_id');
-    }
-
     public function getSpuAttribute($value){
      
         $value = json_decode($value,JSON_OBJECT_AS_ARRAY);
@@ -94,53 +80,4 @@ class Goods extends Base{
 
 
 
-
-    public function scopeStatus($query,$status){
-        switch($status){
-            
-            case 0:
-                //未上架
-                return $query->where('status',0)
-                    ->orWhere(function($query){
-                        $query->where('status',1)
-                            ->where('up_at','>',time())
-                        ;
-                    })
-                ;
-            break;
-            
-            case 1:
-                //已上架
-               return $query->where('status',1)
-                    ->where('up_at','<',time());
-            break;
-
-            case 2:
-               return $query->where('status',2);
-            break;
-        }
-        return $query;
-    }
-
-
-    public function scopePrice($query,$price){
-        if(empty($price)){
-            return $query;
-        }
-        if($price[0]){
-            $query->where('price','>=',$price[0]);
-        }
-        if($price[1]){
-            $query->where('price','<=',$price[1]);
-        }
-        return $query;
-    }
-
-    public function scopeCategory($query, $cate_id){
-        return $cate_id?$query: $query->where('cate_id',$cate_id);
-    }
-
-    public function scopeKw($query, $kw){
-        return empty($kw)?$query: $query->where('title','like',"%$kw%");
-    }
 }
