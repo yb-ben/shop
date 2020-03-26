@@ -51,7 +51,6 @@ class IndexController extends Controller{
      */
     public function list(GetGoodsList $request){
         $data = $request->validated();
-        dd($data);
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
         ->searchStatus(isset($data['status'])?:null)
         ->searchPrice(isset($data['price'])?:null)

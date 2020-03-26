@@ -22,6 +22,7 @@ class GetGoodsList extends StoreBase
             'limit' => 'integer|min:1|max:20',
             'page' => 'integer|min:1',
             'status' => [
+                'integer',
                 Rule::in([-1,0,1,2])
             ],
             'kw' => 'string|max:30',
