@@ -8,7 +8,7 @@ trait GoodsScope{
 
     
 
-    public function scopeStatus($query,$status){
+    public function scopeSearchStatus($query,$status){
         switch($status){
             
             case 0:
@@ -36,7 +36,7 @@ trait GoodsScope{
     }
 
 
-    public function scopePrice($query,$price){
+    public function scopeSearchPrice($query,$price){
         if(empty($price)){
             return $query;
         }
@@ -49,11 +49,11 @@ trait GoodsScope{
         return $query;
     }
 
-    public function scopeCategory($query, $cate_id){
+    public function scopeSearchCategory($query, $cate_id){
         return empty($cate_id)?$query: $query->where('cate_id',$cate_id);
     }
 
-    public function scopeKw($query, $kw){
+    public function scopeSearchKw($query, $kw){
         return empty($kw)?$query: $query->where('title','like',"%$kw%");
     }
 }
