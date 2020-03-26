@@ -30,7 +30,7 @@ class Test implements ShouldQueue
     public function handle()
     {
         //
-        file_put_contents('/tmp/test_job','Job Test run at'. date('Y-m-d').PHP_EOL,FILE_APPEND);
+        file_put_contents('/tmp/test_job','Job Test run at'. date('Y-m-d H:i:s').PHP_EOL,FILE_APPEND);
     }
 
 
