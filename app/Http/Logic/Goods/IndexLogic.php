@@ -29,9 +29,9 @@ class IndexLogic extends Logic
             $goodsContent = GoodsContent::create(['content' => $data['content'] ?: '']);
             $goods->content_id = $goodsContent->id;
             $goods->status = $data['status'];
-            $goods->limit = json_encode($data['limit']);
+            $goods->limit = $data['limit'];
             $goods->up_at = $data['up_at'];
-
+            $goods->is_timing = $data['is_timing'];
             $goods->spu = $data['spu'];
             $goods->save();
 
@@ -63,9 +63,10 @@ class IndexLogic extends Logic
            $goods->content->content = $data['content'];
            $goods->content->isDirty('content') && $goods->content->save();
            $goods->status = $data['status'];
-           $goods->limit = json_encode($data['limit']);
-           $goods->up_at = $data['up_at'];
+           $goods->limit = $data['limit'];
+           $goods->up_at = $data['up_at']?:time();
            $goods->spu = $data['spu'] ;
+           $goods->is_timing = $data['is_timing'];
 
            
            $goods->isDirty() && $goods->save();
@@ -80,12 +81,13 @@ class IndexLogic extends Logic
     }
 
     //商品详情
-    public function detail($id, $field = ['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id','limit','up_at']
-    , $with = [ 'gallery', 'content', 'specs'])
+    public function detail($id, $field = null
+    , $with = null)
     {
-
-        $goods = Goods::with($with)
-            ->select($field)
+        $f = empty($field)?['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id','limit','up_at','is_timing']:$field;
+        $w = empty($with)?[ 'gallery', 'content', 'specs']:$with;
+        $goods = Goods::with($w)
+            ->select($f)
             ->findOrFail($id);
         return $goods;
     }
@@ -167,8 +169,11 @@ class IndexLogic extends Logic
     public function batchTakeUp($data){
       
             $goods = Goods::whereIn('id',$data)->select(['id','status'])->get();
+            $now = time();
             foreach($goods as $good){
                 $good->status = 1;
+                $good->up_at = $now;
+                $good->is_timing = 0; 
                 $good->save();
             }
           
