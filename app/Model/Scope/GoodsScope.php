@@ -10,6 +10,7 @@ trait GoodsScope{
 
     public function scopeSearchStatus($query,$status){
         $status = intval($status);
+       
         switch($status){
             
             case 0:

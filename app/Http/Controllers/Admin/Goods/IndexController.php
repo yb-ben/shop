@@ -51,11 +51,12 @@ class IndexController extends Controller{
      */
     public function list(GetGoodsList $request){
         $data = $request->validated();
+        dd($data);
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
-        ->searchStatus(isset($data['status'])?:null)
-        ->searchPrice(isset($data['price'])?:null)
-        ->searchCategory(isset($data['cate_id'])?:null)
-        ->searchKw(isset($data['kw'])?:null)
+        ->searchStatus(isset($data['status'])?$data['status']:null)
+        ->searchPrice(isset($data['price'])?$data['price']:null)
+        ->searchCategory(isset($data['cate_id'])?$data['cate_id']:null)
+        ->searchKw(isset($data['kw'])?$data['kw']:null)
         ->orderby('sort')
         ->orderby('updated_at','desc')
         ->paginate($request->input('limit',10))
