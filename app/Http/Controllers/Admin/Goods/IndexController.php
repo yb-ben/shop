@@ -50,14 +50,9 @@ class IndexController extends Controller{
      * 商品列表
      */
     public function list(GetGoodsList $request){
-
+        $status = intval($request->get('status',-1));
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
-        ->where(function($query)use($request){
-            $status = intval($request->get('status',-1));
-            if($status !== -1){
-                $query->where('status',$status);
-            }
-        })
+        ->status($status)
         ->orderby('sort')
         ->orderby('updated_at','desc')
         ->paginate($request->input('limit',10))

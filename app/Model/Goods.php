@@ -91,4 +91,34 @@ class Goods extends Base{
     public function getLimitAttribute($value){
         return  json_decode($value,JSON_OBJECT_AS_ARRAY);
     }
+
+
+
+
+    public function scopeStatus($query,$status){
+        switch($status){
+            
+            case 0:
+                //未上架
+                return $query->where('status',0)
+                    ->orWhere(function($query){
+                        $query->where('status',1)
+                            ->where('up_at','>',time())
+                        ;
+                    })
+                ;
+            break;
+            
+            case 1:
+                //已上架
+               return $query->where('status',1)
+                    ->where('up_at','<',time());
+            break;
+
+            case 2:
+               return $query->where('status',2);
+            break;
+        }
+        return $query;
+    }
 }

@@ -29,8 +29,9 @@ class StoreGoodsPost extends StoreBase
             'code' => 'string|nullable',
             'cate_id' => 'required|integer',
             'status' => 'required|in:0,1',
-            'up_at' =>'nullable|integer',
+
             'is_timing' => 'required|in:0,1',
+            'up_at' =>'required_if:is_timing,1|integer',
             'limit' => 'nullable|array',
             'limit.0.type' =>'in:1,2',
             'limit.0.count' => 'required_if:limit.0.type,1|integer',
