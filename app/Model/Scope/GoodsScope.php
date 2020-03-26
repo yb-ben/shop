@@ -50,7 +50,7 @@ trait GoodsScope{
     }
 
     public function scopeCategory($query, $cate_id){
-        return $cate_id?$query: $query->where('cate_id',$cate_id);
+        return empty($cate_id)?$query: $query->where('cate_id',$cate_id);
     }
 
     public function scopeKw($query, $kw){

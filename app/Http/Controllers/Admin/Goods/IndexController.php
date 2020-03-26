@@ -50,16 +50,13 @@ class IndexController extends Controller{
      * 商品列表
      */
     public function list(GetGoodsList $request){
-        $status = intval($request->get('status',-1));
-        $price = $request->get('price',[null,null]);
-        $cate_id = $request->get('cate_id',null);
-        $kw = $request->get('kw',null);
+        $data = $request->validated();
 
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
-        ->status($status)
-        ->price($price)
-        ->category($cate_id)
-        ->kw($kw)
+        ->status($data['status'])
+        ->price($data['price'])
+        ->category($data['cate_id'])
+        ->kw($data['kw'])
         ->orderby('sort')
         ->orderby('updated_at','desc')
         ->paginate($request->input('limit',10))
