@@ -190,9 +190,11 @@ class IndexLogic extends Logic
 
     //批量删除
     public function batchDelete($data){
-        $goods = Goods::whereIn('id',$data)->get();
+        $goods = Goods::whereIn('id',$data)->select(['id','status'])->get();
         foreach($goods as $item){
-            $item->delete();
+            if($item->status !== 1){
+                $item->delete();
+            }
         }
     }
 
