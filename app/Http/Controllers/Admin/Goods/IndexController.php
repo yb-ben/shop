@@ -117,4 +117,12 @@ class IndexController extends Controller{
         return Response::api();
    
     }
+
+    //删除
+    public function delete(ModifyStatus $request){
+        $data = $request->validated();
+        $logic = new IndexLogic;
+        $logic->batchDelete($data['ids']);
+        return Response::api();
+    }
 }

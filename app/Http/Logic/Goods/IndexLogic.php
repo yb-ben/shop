@@ -188,6 +188,15 @@ class IndexLogic extends Logic
     }
 
 
+    //批量删除
+    public function batchDelete($data){
+        $goods = Goods::whereIn('id',$data)->get();
+        foreach($goods as $item){
+            $item->delete();
+        }
+    }
+
+
     private function saveOneToMany(Array $data,Model $model,String $ref,\Closure $beforeInsert ,\Closure $updater = null,$pk = 'id'){
 
         if($updater){

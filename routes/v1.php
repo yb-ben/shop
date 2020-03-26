@@ -38,6 +38,7 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::post('/edit','IndexController@edit');//修改商品
         Route::post('/takeUp','IndexController@takeUp');//上架
         Route::post('/takeDown','IndexController@takeDown');//下架
+        Route::post('/delete','IndexController@delete');//删除
 
     });
 
