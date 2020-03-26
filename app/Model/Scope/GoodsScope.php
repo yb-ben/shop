@@ -39,19 +39,23 @@ trait GoodsScope{
 
 
     public function scopeSearchPrice($query,$price){
-        if(empty($price)){
-            return $query;
-        }
-        if(!empty($price[0])){
-            $query->where('price','>=',$price[0]);
-        }
-        if(!empty($price[1])){
-            $query->where('price','<=',$price[1]);
+        if(!empty($price)){
+            list($s,$e) = $price;
+            $s = intval($s);
+            $e = intval($e);
+            if($s){
+                $query->where('price','>=',$s);
+            }
+            if($e){
+                $query->where('price','<=',$e);
+            }
+            
         }
         return $query;
     }
 
     public function scopeSearchCategory($query, $cate_id){
+        $cate_id = intval($cate_id);
         return empty($cate_id)?$query: $query->where('cate_id',$cate_id);
     }
 
