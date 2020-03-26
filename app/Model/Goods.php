@@ -82,8 +82,8 @@ class Goods extends Base{
     }
 
     public function setLimitAttribute($value){
-        
-        $this->attributes['limit'] = json_encode( (empty($value)?[]:$value),JSON_UNESCAPED_UNICODE);
+        $v = (empty($value)?null:$value);
+        $this->attributes['limit'] = json_encode($v ,JSON_UNESCAPED_UNICODE);
     }
 
     
