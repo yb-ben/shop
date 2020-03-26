@@ -121,4 +121,26 @@ class Goods extends Base{
         }
         return $query;
     }
+
+
+    public function scopePrice($query,$price){
+        if(empty($price)){
+            return $query;
+        }
+        if($price[0]){
+            $query->where('price','>=',$price[0]);
+        }
+        if($price[1]){
+            $query->where('price','<=',$price[1]);
+        }
+        return $query;
+    }
+
+    public function scopeCategory($query, $cate_id){
+        return $cate_id?$query: $query->where('cate_id',$cate_id);
+    }
+
+    public function scopeKw($query, $kw){
+        return empty($kw)?$query: $query->where('title','like',"%$kw%");
+    }
 }
