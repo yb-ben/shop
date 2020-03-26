@@ -53,10 +53,10 @@ class IndexController extends Controller{
         $data = $request->validated();
 
         $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
-        ->status($data['status']?:null)
-        ->price($data['price']?:null)
-        ->category($data['cate_id']?:null)
-        ->kw($data['kw']?:null)
+        ->status(isset($data['status'])?:null)
+        ->price(isset($data['price'])?:null)
+        ->category(isset($data['cate_id'])?:null)
+        ->kw(isset($data['kw'])?:null)
         ->orderby('sort')
         ->orderby('updated_at','desc')
         ->paginate($request->input('limit',10))
