@@ -12,9 +12,8 @@ class TestController extends Controller{
 
 
         Test::dispatch()
-        ->delay(now()->addMinutes(10))
+        ->delay(now()->addSeconds(60))
         ->onConnection('redis')
-        ->onQueue('test_job')
         ;
         return 'ok';
     }
