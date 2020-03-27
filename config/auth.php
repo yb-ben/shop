@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -14,7 +15,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
 
@@ -41,11 +42,10 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
-        ],
+        'api' =>[
+            'driver' => 'jwt',
+            'provider' => 'admin'
+        ]
     ],
 
     /*
@@ -71,10 +71,11 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Model\Admin::class,
+        ],
+
     ],
 
     /*
@@ -99,6 +100,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+      
     ],
 
     /*

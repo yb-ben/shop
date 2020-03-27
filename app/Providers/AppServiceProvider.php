@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Auth\AdminGuard;
+use App\Auth\AdminProvider;
 use App\Model\Goods;
 use App\Observers\GoodsObserver;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,7 +34,11 @@ class AppServiceProvider extends ServiceProvider
         $this->sqlListener();
     }
 
-
+    /**
+     * SQL监听器
+     *
+     * @return void
+     */
     protected function sqlListener(){
         file_put_contents(__DIR__.'/sql_listener.log','');
         DB::listen(function($query){
@@ -40,7 +47,15 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * 模型观察者注册
+     *
+     * @return void
+     */
     protected function modelObserver(){
         Goods::observe(GoodsObserver::class);
     } 
+
+
+   
 }

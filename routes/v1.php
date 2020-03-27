@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
 
 
+    Route::get('/index','IndexController@index')->middleware('refreshToken');
+    
+    Route::post('/login','LoginController@login');//登录
+    Route::post('/logout','LoginController@logout');//登出
+
     Route::group(['prefix' => 'category','namespace'=>'Category'],function(){
         //商品分类
         Route::get('/tree','IndexController@tree');//树形
@@ -53,3 +58,4 @@ Route::group(['prefix' =>'test'],function(){
 
     Route::get('/','TestController@index');
 });
+

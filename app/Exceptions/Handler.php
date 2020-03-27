@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use App\Utils\Format;
+use App\Utils\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -51,9 +54,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        // 
-        //    return response()->json( Format::api([],$exception->getMessage(),400) );
-        // 
+      
+        if($exception instanceof ValidationException){
+            return Response::apiError($exception->getMessage());
+        }
+        if($exception instanceof UnauthorizedHttpException){
+            return Response::apiError($exception->getMessage(),50000);
+        }
         return parent::render($request, $exception);
     }
 }
