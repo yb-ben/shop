@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
 
+    Route::group(['middleware' => 'refreshToken'],function(){
 
-    Route::get('/index','IndexController@index')->middleware('refreshToken');
-    
+        Route::get('/index','IndexController@index');
+        Route::get('/info','AdminController@info');//用户信息
+    });
     Route::post('/login','LoginController@login');//登录
     Route::post('/logout','LoginController@logout');//登出
 

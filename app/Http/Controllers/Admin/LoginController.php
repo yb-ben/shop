@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Login\LoginRequest;
 use App\Utils\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,9 @@ class LoginController extends Controller{
 
    
 
-    public function login(Request $request){
+    public function login(LoginRequest $request){
     
-        $cr = $request->only('username','password');
+        $cr = $request->validated();
         $token = Auth::guard('api')->attempt($cr);
         if($token){
             return Response::api(['token' => $token]);
