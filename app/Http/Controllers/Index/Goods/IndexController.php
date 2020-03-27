@@ -13,7 +13,7 @@ class IndexController extends Controller{
     public function list(){
 
         $data = Goods::where('status',1)
-        ->select([])
+        ->select()
         ->orderby('create_time','desc')
         ->paginate();
 

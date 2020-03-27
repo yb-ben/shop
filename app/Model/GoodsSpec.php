@@ -21,4 +21,17 @@ class GoodsSpec extends Base{
     public function setSkuAttribute($value){
         $this->attributes['sku'] = json_encode($value,JSON_UNESCAPED_UNICODE);
     }
+
+    public function getSkuTextAttribute(){
+        $sku = $this->sku;
+        $p = null;
+        $str = [];
+        foreach($sku as $k => $v){
+            if($k{0} === 'k' && mb_strpos($k,'_',1) === -1){
+                $p = mb_substr($k,1);
+                $str[] = $v . ':' . $sku["v$p"];
+            }
+        }
+        return implode(' ',$str);
+    }
 }
