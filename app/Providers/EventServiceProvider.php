@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\VerificationCodeSend;
+use App\Listeners\SmsSendNotification;
+use Huyibin\Sms\Events\Events\VerificationCodeSend as EventsVerificationCodeSend;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -21,6 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         Login::class => [
+            
+        ],
+
+        EventsVerificationCodeSend::class =>[
             
         ]
     ];

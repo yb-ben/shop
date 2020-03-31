@@ -54,13 +54,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-      
-        if($exception instanceof ValidationException){
-            return Response::apiError($exception->getMessage());
-        }
-        if($exception instanceof UnauthorizedHttpException){
-            return Response::apiError($exception->getMessage(),50000);
-        }
+        // dd($exception);
+        // if($exception instanceof ValidationException){
+        //     return Response::apiError($exception->getMessage());
+        // }
+        // if($exception instanceof UnauthorizedHttpException){
+        //     return Response::apiError($exception->getMessage(),50000);
+        // }
         return parent::render($request, $exception);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Goods;
+namespace App\Http\Requests\Admin\Goods;
 
 use App\Http\Requests\StoreBase;
 

@@ -4,8 +4,8 @@
 namespace App\Http\Controllers\Admin\Goods;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Goods\StoreAttributePost;
-use App\Http\Requests\Goods\StoreValuesPost;
+use App\Http\Requests\Admin\Goods\StoreAttributePost;
+use App\Http\Requests\Admin\Goods\StoreValuesPost;
 use App\Model\GoodsAttr;
 use App\Model\GoodsValue;
 use App\Utils\Response;

@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -176,6 +177,9 @@ return [
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Huyibin\Sms\SmsServiceProvider::class,
+        Huyibin\VerificationCode\VCodeServiceProvider::class
+        
     ],
 
     /*
@@ -227,7 +231,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Sms' =>  Huyibin\Sms\Sms::class,
+        'VCode' => Huyibin\VerificationCode\Facade\VCode::class
     ],
 
 ];

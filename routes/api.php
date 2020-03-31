@@ -22,3 +22,10 @@ Route::group([ 'prefix' =>'webhooks'],function(){
 
     Route::post('/onpush','WebHooksController@onPush');
 });
+
+
+
+Route::group(['prefix' => 'test'], function () {
+
+    Route::get('/', 'TestController@index');
+});

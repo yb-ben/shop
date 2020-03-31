@@ -62,19 +62,14 @@
                 margin-bottom: 30px;
             }
         </style>
+        <style link="/css/app.css"></style>
+        <script src="/js/app.js"></script>
     </head>
     <body>
      
 
-        @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+    <div id="app">
+    <example-component></example-component>
     </div>
-@endif
-
    </body>
 </html>

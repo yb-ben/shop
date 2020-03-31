@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin\Goods;
 
 use App\Http\Controllers\Controller;
 use App\Http\Logic\Goods\IndexLogic;
-use App\Http\Requests\Goods\GetGoodsList;
-use App\Http\Requests\Goods\ModifyStatus;
-use App\Http\Requests\Goods\StoreGoodsPost;
+use App\Http\Requests\Admin\Goods\GetGoodsList;
+use App\Http\Requests\Admin\Goods\ModifyStatus;
+use App\Http\Requests\Admin\Goods\StoreGoodsPost;
 use App\Model\Goods;
 use App\Model\GoodsAttr;
 use App\Model\GoodsSpec;

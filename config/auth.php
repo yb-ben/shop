@@ -37,10 +37,10 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+       'web' => [
+           'driver' => 'session',
+           'provider' => 'users',
+       ],
 
         'api' =>[
             'driver' => 'jwt',
@@ -66,9 +66,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'users'=>[
+
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => ''
         ],
 
         'admin' => [
@@ -101,7 +102,7 @@ return [
             'throttle' => 60,
         ],
 
-      
+
     ],
 
     /*
