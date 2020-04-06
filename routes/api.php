@@ -29,3 +29,9 @@ Route::group(['prefix' => 'test'], function () {
 
     Route::get('/', 'TestController@index');
 });
+
+Route::group(['namespace' => 'api'],function(){
+    Route::post('login','LoginController@login');
+    Route::get("index",'IndexController@index')
+        ->middleware(['testAuth:test']);
+});

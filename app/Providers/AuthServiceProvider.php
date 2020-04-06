@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Auth\Index\IndexGuard;
-use App\Auth\Index\IndexProvider;
+
+use App\Utils\Auth\User;
+use App\Utils\Auth\UserGuard;
+use App\Utils\Auth\UserProvider;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-    }
 
+    }
 
 }

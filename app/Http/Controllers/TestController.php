@@ -11,9 +11,11 @@ class TestController extends Controller{
 
     public function index(){
 
-       
+
         $code = app('VCode')->generateAndStore('15917861851',6);
+        dump(session()->all());
         dd($code);
+
        // return  Sms::sendVerificationCode('15917861851',$code);
 
     }
