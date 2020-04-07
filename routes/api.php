@@ -34,4 +34,5 @@ Route::group(['namespace' => 'api'],function(){
     Route::post('login','LoginController@login');
     Route::get("index",'IndexController@index')
         ->middleware(['testAuth:test']);
+    Route::get('logout','LoginController@logout');
 });

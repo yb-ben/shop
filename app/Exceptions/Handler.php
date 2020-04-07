@@ -61,6 +61,7 @@ class Handler extends ExceptionHandler
         // if($exception instanceof UnauthorizedHttpException){
         //     return Response::apiError($exception->getMessage(),50000);
         // }
+
         return parent::render($request, $exception);
     }
 }

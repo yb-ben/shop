@@ -30,7 +30,6 @@ class LoginController extends Controller
             // 通过认证..
 
             $api_token =  Auth::token();
-            dump(session()->all());
 
             return Response::api(['token' => $api_token]);
         }
@@ -41,10 +40,7 @@ class LoginController extends Controller
     public function logout(){
 
         Auth::logout();
+        return Response::api();
     }
 
-    public function username()
-    {
-        return 'email';
-    }
 }

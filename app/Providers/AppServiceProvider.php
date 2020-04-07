@@ -10,6 +10,7 @@ use App\Utils\Auth\UserGuard;
 use App\Utils\Auth\UserProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -63,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
     public function test(){
 
         Auth::provider('test',function ($app,$config){
-            return new UserProvider(User::class) ;
+            return new UserProvider(User::class,Redis::connection()) ;
         });
 
         Auth::extend('test',function ($app, $name, array $config){
