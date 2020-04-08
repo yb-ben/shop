@@ -28,6 +28,7 @@ Route::group([ 'prefix' =>'webhooks'],function(){
 Route::group(['prefix' => 'test'], function () {
 
     Route::get('/', 'TestController@index');
+    Route::get('exportRegion','TestController@exportRegion');
 });
 
 Route::group(['namespace' => 'api'],function(){
