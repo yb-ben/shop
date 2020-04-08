@@ -11,7 +11,7 @@ class AdminController extends Controller{
     public function info(){
 
         $user = Auth::guard('api')->user();
-
+        session('test','hello,world');
         return Response::api([
             'id' => $user->id,
             'username' => $user->username,
@@ -21,6 +21,6 @@ class AdminController extends Controller{
 
 
     public function resetPassword(){
-        
+
     }
 }

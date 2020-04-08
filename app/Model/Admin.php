@@ -5,35 +5,28 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends  Authenticatable implements JWTSubject{
+class Admin extends  Authenticatable {
 
     use SoftDeletes,Notifiable;
 
     protected $table = 'admin';
-    
-    protected $fillable = ['username','password','email'];
+
+    protected $fillable = ['username','password','email','remember_token'];
 
     protected $primaryKey = 'id';
 
 
-    public function getJWTIdentifier(){
 
-        return $this->getKey();
-    }
-    
 
-    public function getJWTCustomClaims(){
-        return [
-            'id' => $this->id,
-            'usn' => $this->username,
-        ];
-        
+    public function getDateFormat(){
+        return time();
     }
 
 
-  
-
+    protected $casts =[
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
+    ];
 }
