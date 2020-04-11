@@ -11,7 +11,7 @@ class IndexController extends Controller{
     public function index(){
 
 
-        return Response::api();
+        return Response::api(['test'=> session('test')]);
     }
 
 
