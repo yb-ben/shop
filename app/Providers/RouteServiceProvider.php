@@ -46,7 +46,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiV1Routes();
         $this->mapWebRoutes();
         $this->mapApiIndexV1Routes();
-        $this->mapAuthV1Routes();
         //
     }
 
@@ -66,22 +65,16 @@ class RouteServiceProvider extends ServiceProvider
 
 
 
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
+    //暂时用作公共接口
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             //->middleware('api')
+             ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
 
-
+    //后台接口
     protected function mapApiV1Routes(){
 
         Route::middleware('api')
@@ -90,18 +83,15 @@ class RouteServiceProvider extends ServiceProvider
         ->group(base_path('routes/admin_v1.php'));
     }
 
+
+    //前台用户接口
     protected function mapApiIndexV1Routes(){
 
-        Route::middleware('index')
+        Route::middleware('api')
         ->prefix('api/v1/index')
         ->namespace($this->namespace.'\index')
         ->group(base_path('routes/index_v1.php'));
     }
 
 
-    protected function mapAuthV1Routes(){
-        Route::prefix('auth/v1/')
-        ->namespace($this->namespace.'\auth')
-        ->group(base_path('routes/auth.php'));
-    }
 }

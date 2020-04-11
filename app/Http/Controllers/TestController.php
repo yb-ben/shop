@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Region;
+use App\Utils\Response;
 use Huyibin\Sms\Sms;
 use Huyibin\Struct\Tree;
 use Illuminate\Support\Facades\Redis;
@@ -11,21 +12,22 @@ class TestController extends Controller{
 
 
 
-    public function index(){
+    public function code(){
 
 
         $code = app('VCode')->generateAndStore('15917861851',6);
-        dump(session()->all());
-        dd($code);
+        
 
-       // return  Sms::sendVerificationCode('15917861851',$code);
+        //Sms::sendVerificationCode('15917861851',$code);
 
+        return $code;
     }
 
 
     public function check($phoneNumber,$code){
 
-        return app('VCode')->check($phoneNumber,$code);
+       return app('VCode')->check($phoneNumber,$code);
+        
     }
 
 

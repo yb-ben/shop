@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Index\User;
 
 use App\Utils\Response;
 use Illuminate\Support\Facades\Auth;
@@ -28,19 +28,24 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             // 通过认证..
-
             $api_token =  Auth::token();
-
             return Response::api(['token' => $api_token]);
         }
         return Response::apiError();
     }
 
-
+    /**
+     * 退出登录
+     *
+     * @return void
+     */
     public function logout(){
-
         Auth::logout();
         return Response::api();
     }
 
+
+    public function register(){
+
+    }
 }

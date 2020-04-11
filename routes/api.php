@@ -31,9 +31,6 @@ Route::group(['prefix' => 'test'], function () {
     Route::get('exportRegion','TestController@exportRegion');
 });
 
-Route::group(['namespace' => 'api'],function(){
-    Route::post('login','LoginController@login');
-    Route::get("index",'IndexController@index')
-        ->middleware(['testAuth:test']);
-    Route::get('logout','LoginController@logout');
-});
+
+
+Route::get('/sms/vcode','VerificationCodeController@code');//消息验证码

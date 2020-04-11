@@ -2,11 +2,10 @@
 
 namespace App\Exceptions;
 
-use App\Utils\Format;
+use App\Utils\Auth\UnauthenticatedException;
 use App\Utils\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -58,9 +57,9 @@ class Handler extends ExceptionHandler
         // if($exception instanceof ValidationException){
         //     return Response::apiError($exception->getMessage());
         // }
-        // if($exception instanceof UnauthorizedHttpException){
-        //     return Response::apiError($exception->getMessage(),50000);
-        // }
+        if($exception instanceof UnauthenticatedException){
+            return Response::apiError($exception->getMessage(),400);
+        }
 
         return parent::render($request, $exception);
     }
