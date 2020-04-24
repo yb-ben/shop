@@ -30,6 +30,6 @@ class Test implements ShouldQueue
     public function handle()
     {
         //
-        @file_put_contents('./test_job.log',time().PHP_EOL);
+        @file_put_contents('/tmp/test_job.log',time().PHP_EOL);
     }
 }
