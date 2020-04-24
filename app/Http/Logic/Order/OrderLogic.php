@@ -61,7 +61,7 @@ class OrderLogic
 
 
     private function fireAfterCreate($order){
-       // ExpireOrder::dispatch()->delay($order->expired_at);
+       ExpireOrder::dispatch($order->id)->delay(60);
     }
 
     private function getId(){

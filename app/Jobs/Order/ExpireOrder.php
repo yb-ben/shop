@@ -35,11 +35,8 @@ class ExpireOrder implements ShouldQueue
      */
     public function handle()
     {
-        $order = Order::find($this->orderId);
-        if($order->status === 0){
-            $order->status = 3;
-            $order->closed_at = time();
-            $order->where('status',0)->save();
-        }
+        Order::where('status',0)
+            ->where('id',$this->orderId)
+            ->update(['status'=>3,'closed_at'=>time()]);
     }
 }

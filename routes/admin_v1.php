@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
  * API VERSION V1.0
  */
 
+Route::get('/index', 'IndexController@index');
 Route::group(['middleware' => 'auth:api'], function () {
 
-    Route::get('/index', 'IndexController@index');
     Route::get('/info', 'AdminController@info'); //用户信息
 });
 Route::post('/login', 'LoginController@login'); //登录
