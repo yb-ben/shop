@@ -13,8 +13,8 @@ class AddRequest extends StoreBase{
         return [
             'goods_id' => 'required|integer',
             'count' => 'integer|min:1|max:200',
-            'spec_id' => 'integer'
-        ];
+            'spec_id' => 'nullable|integer',
+         ];
     }
 
 

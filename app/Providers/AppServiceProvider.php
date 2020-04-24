@@ -8,6 +8,7 @@ use App\Observers\GoodsObserver;
 use App\Utils\Auth\User;
 use App\Utils\Auth\UserGuard;
 use App\Utils\Auth\UserProvider;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -33,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        Collection::macro('append',function($attributes){
+            return $this->each->append($attributes);
+        });
         $this->modelObserver();
         $this->sqlListener();
         $this->test();

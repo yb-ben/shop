@@ -15,7 +15,7 @@ class AdminController extends Controller{
         return Response::api([
             'id' => $user->id,
             'username' => $user->username,
-            'email' => $user->email
+            'email' => $user->email,
         ]);
     }
 

@@ -11,10 +11,12 @@ use App\Model\Goods;
 use App\Model\GoodsAttr;
 use App\Model\GoodsSpec;
 use App\Model\GoodsValue;
+use App\Utils\Format;
 use App\Utils\Response;
 use Illuminate\Http\Request;
 
-class IndexController extends Controller{
+class IndexController extends Controller
+{
 
     /**
      * 添加商品
@@ -22,14 +24,14 @@ class IndexController extends Controller{
      * @param Request $request
      * @return void
      */
-    public function add(StoreGoodsPost $request){
+    public function add(StoreGoodsPost $request)
+    {
 
-      
 
         $data = $request->validated();
-       
-         $logic = new IndexLogic;
-         $logic->add($data);
+
+        $logic = new IndexLogic;
+        $logic->add($data);
         return Response::api($data);
     }
 
@@ -38,7 +40,8 @@ class IndexController extends Controller{
      *
      * @return void
      */
-    public function edit(StoreGoodsPost $request){
+    public function edit(StoreGoodsPost $request)
+    {
 
         $data = $request->validated();
         $logic = new IndexLogic;
@@ -49,22 +52,31 @@ class IndexController extends Controller{
     /**
      * 商品列表
      */
-    public function list(GetGoodsList $request){
+    public function list(GetGoodsList $request)
+    {
         $data = $request->validated();
-    
-        $data = Goods::select(['id','title','price','line_price','count','status','main_image','updated_at'])
-        ->searchStatus(isset($data['status'])?$data['status']:null)
-        ->searchPrice(isset($data['price'])?$data['price']:null)
-        ->searchCategory(isset($data['cate_id'])?$data['cate_id']:null)
-        ->searchKw(isset($data['kw'])?$data['kw']:null)
-        ->orderby('sort')
-        ->orderby('updated_at','desc')
-        ->paginate($request->input('limit',10))
+
+        $data = Goods::select(['id', 'title', 'price', 'line_price', 'count', 'image_id', 'status', 'updated_at'])
+            ->withImage()
+            ->searchStatus(isset($data['status']) ? $data['status'] : null)
+            ->searchPrice(isset($data['price']) ? $data['price'] : null)
+            ->searchCategory(isset($data['cate_id']) ? $data['cate_id'] : null)
+            ->searchKw(isset($data['kw']) ? $data['kw'] : null)
+            ->orderby('sort')
+            ->orderby('updated_at', 'desc')
+            ->paginate($request->input('limit', 10))
+
         ;
-        foreach($data as $item){
-            $item->setAppends(['main_image_full','status_text']);
-        }
+
+        $data->getCollection()
+            ->append(['status_text','image_url'])
+            ->makeHidden(['image']);
+//
         $data = $data->toArray();
+//        foreach ($data['data'] as &$item){
+//            $item['price'] =Format::moneyHuman($item['price']);
+//            $item['line_price'] = Format::moneyHuman($item['line_price']);
+//        }
 
         return Response::api($data);
     }
@@ -76,32 +88,46 @@ class IndexController extends Controller{
      * @param [type] $id
      * @return void
      */
-    public function detail($id){
-            
-        $goodsLogic = new IndexLogic;
+    public function detail($id)
+    {
 
-        $goods = $goodsLogic->detail($id);
-        $goods->setAppends(['main_image_full']);
-        foreach($goods->gallery as $gallery){
-            $gallery->setAppends(['url_full']);
-        }
+        $goods = Goods::with([ 'gallery'=>function($query){$query->withImage();}, 'content', 'specs'])
+            ->withImage()
+            ->select(['id', 'title', 'image_id', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','limit','up_at','is_timing'])
+            ->findOrFail($id)
+            ->append(['image_url'])
+            ->makeHidden(['image'])
+        ;
+        $goods->gallery && $goods->gallery->append(['image_url'])->makeHidden(['image']);
 
-        return Response::api($goods);
+        $data = $goods->toArray();
+
+//        $data['price'] = Format::moneyHuman($data['price']);
+//        $data['line_price'] =Format::moneyHuman($data['line_price']);
+//        if(!empty($data['specs'])){
+//            foreach ($data['specs'] as &$spec){
+//                $spec['price'] = Format::moneyHuman($spec['price']);
+//                $spec['cast'] = Format::moneyHuman($spec['cast']);
+//            }
+//        }
+        return Response::api($data);
     }
 
 
     //商品sku信息
-    public function getSku($id){
+    public function getSku($id)
+    {
 
-        $goodsSpecs = GoodsSpec::where('goods_id',$id)->get();
-        $goodsAttr = GoodsAttr::where('goods_id',$id)->get();
-        $goodsValues = GoodsValue::where('goods_id',$id)->get();
+        $goodsSpecs = GoodsSpec::where('goods_id', $id)->get();
+        $goodsAttr = GoodsAttr::where('goods_id', $id)->get();
+        $goodsValues = GoodsValue::where('goods_id', $id)->get();
 
-        return Response::api(['specs' => $goodsSpecs,'attrs'=>$goodsAttr ,'values'=>$goodsValues]);
+        return Response::api(['specs' => $goodsSpecs, 'attrs' => $goodsAttr, 'values' => $goodsValues]);
     }
 
     //上架
-    public function takeUp(ModifyStatus $request){
+    public function takeUp(ModifyStatus $request)
+    {
         $data = $request->validated();
         $logic = new IndexLogic;
         $logic->batchTakeUp($data['ids']);
@@ -109,16 +135,18 @@ class IndexController extends Controller{
     }
 
     //下架
-    public function takeDown(ModifyStatus $request){
+    public function takeDown(ModifyStatus $request)
+    {
         $data = $request->validated();
         $logic = new IndexLogic;
         $logic->batchTakeDown($data['ids']);
         return Response::api();
-   
+
     }
 
     //删除
-    public function delete(ModifyStatus $request){
+    public function delete(ModifyStatus $request)
+    {
         $data = $request->validated();
         $logic = new IndexLogic;
         $logic->batchDelete($data['ids']);

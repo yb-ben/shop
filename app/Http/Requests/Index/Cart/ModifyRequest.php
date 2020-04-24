@@ -11,7 +11,7 @@ class ModifyRequest extends StoreBase{
     public function rules(){
 
         return [
-            'card_id' => 'required|integer',
+            'cart_id' => 'required|integer',
             'count' => 'integer|min:1|max:200',
         ];
     }

@@ -12,7 +12,7 @@ class Response {
         ->json(Format::api($data,$msg,$errcode,$debug));
     }
 
-    public static function apiError($msg = '',$errcode = 40000,$data = [],$debug = '')
+    public static function apiError($msg = '',$errcode = 401,$data = [],$debug = '')
     {
         return response()
         ->json(Format::api($data,$msg,$errcode,$debug));

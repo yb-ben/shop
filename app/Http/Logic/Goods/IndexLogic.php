@@ -3,6 +3,7 @@
 namespace App\Http\Logic\Goods;
 
 use App\Http\Logic\Logic;
+use App\Model\Base;
 use App\Model\Goods;
 use App\Model\GoodsContent;
 use Illuminate\Database\Eloquent\Model;
@@ -11,18 +12,36 @@ use Illuminate\Support\Facades\DB;
 class IndexLogic extends Logic
 {
 
+
+
+    /**
+     * 数据规范化
+     * @param $data
+     * @return mixed
+     */
+    protected function normalize(&$data){
+        if($data['status'] === 1 && empty($data['up_at'])){
+            $data['up_at'] = time();
+        }else if($data['status'] === 0 && $data['is_timing'] === 0){
+            $data['up_at'] = null;
+        }
+        return $data;
+    }
+
+
     public function add($data)
     {
-
+         $this->normalize($data);
         return DB::transaction(function () use ($data) {
 
             $goods = new Goods;
             $goods->title = $data['title'];
-            $goods->main_image = $data['main_image'];
-            $goods->file_id = $data['file_id'];
+            $goods->image_id = $data['image_id'];
             $goods->price = $data['price'];
             $goods->line_price = $data['line_price'];
+
             $goods->count = $data['count'];
+
             $goods->cate_id = $data['cate_id'];
             $goods->code = $data['code'];
             $goods->how = $data['how'];
@@ -46,13 +65,12 @@ class IndexLogic extends Logic
 
     public function edit($data)
     {
-
+        $this->normalize($data);
         return DB::transaction(function () use ($data) {
 
             $goods = Goods::with(['content'])->find($data['id']);
             $goods->title = $data['title'];
-            $goods->main_image = $data['main_image'];
-            $goods->file_id = $data['file_id'];
+            $goods->image_id = $data['image_id'];
             $goods->price = $data['price'];
             $goods->line_price = $data['line_price'];
             $goods->count = $data['count'];
@@ -68,7 +86,7 @@ class IndexLogic extends Logic
            $goods->spu = $data['spu'] ;
            $goods->is_timing = $data['is_timing'];
 
-           
+
            $goods->isDirty() && $goods->save();
 
             //保存属性 和 属性值
@@ -84,11 +102,16 @@ class IndexLogic extends Logic
     public function detail($id, $field = null
     , $with = null)
     {
-        $f = empty($field)?['id', 'title', 'main_image', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','file_id','limit','up_at','is_timing']:$field;
-        $w = empty($with)?[ 'gallery', 'content', 'specs']:$with;
+        $f = empty($field)?['id', 'title', 'image_id', 'status', 'price', 'line_price', 'cate_id', 'count', 'spu', 'content_id','limit','up_at','is_timing']:$field;
+        $w = empty($with)?[ 'gallery'=>function($query){$query->withImage();}, 'content', 'specs']:$with;
         $goods = Goods::with($w)
+            ->withImage()
             ->select($f)
-            ->findOrFail($id);
+            ->findOrFail($id)
+            ->append(['image_url'])
+            ->makeHidden(['image'])
+        ;
+        $goods->gallery && $goods->gallery->append(['image_url'])->makeHidden(['image']);
         return $goods;
     }
 
@@ -97,7 +120,7 @@ class IndexLogic extends Logic
     {
         if(!$isUpdate){
 
-            $this->saveOneToMany($data,$goods,'gallery',function($data,$model){
+            Base::saveOneToMany($data,$goods,'gallery',function($data,$model){
                 foreach ($data as &$i) {
                     $i['goods_id'] = $model->id;
                 }
@@ -105,13 +128,13 @@ class IndexLogic extends Logic
             });
         }else{
 
-            $this->saveOneToMany($data,$goods,'gallery',function($data,$model){
+            Base::saveOneToMany($data,$goods,'gallery',function($data,$model){
                 foreach ($data as &$i) {
                     $i['goods_id'] = $model->id;
                 }
                 return $data;
             },function($r,$v,$m){
-                $r->fill(['goods_id'=>$m->id,'url' => $v['url'] ,'file_id' => $v['file_id']]);
+                $r->fill(['goods_id'=>$m->id,'image_id' => $v['image_id']]);
             });
         }
 
@@ -123,7 +146,7 @@ class IndexLogic extends Logic
 
         if (!$isUpdate) {
             //新增
-            $this->saveOneToMany($data,$goods,'specs',function($data,$model){
+            Base::saveOneToMany($data,$goods,'specs',function($data,$model){
                 foreach ($data as &$i) {
                     $t = [
                         'count' => $i['count'],
@@ -142,7 +165,7 @@ class IndexLogic extends Logic
 
         } else {
             //更新
-            $this->saveOneToMany($data,$goods,'specs',function($data,$model){
+            Base::saveOneToMany($data,$goods,'specs',function($data,$model){
                 foreach ($data as &$i) {
                     $t = [
                         'count' => $i['count'],
@@ -167,29 +190,29 @@ class IndexLogic extends Logic
 
     //批量上架
     public function batchTakeUp($data){
-      
+
             $goods = Goods::whereIn('id',$data)->select(['id','status'])->get();
             $now = time();
             foreach($goods as $good){
                 $good->status = 1;
                 $good->up_at = $now;
-                $good->is_timing = 0; 
+                $good->is_timing = 0;
                 $good->save();
             }
-          
-     
+
+
     }
 
     //批量下架
     public function batchTakeDown($data){
-     
+
             $goods = Goods::whereIn('id',$data)->select(['id','status'])->get();
             foreach($goods as $good){
                 $good->status = 0;
                 $good->save();
             }
-        
-     
+
+
     }
 
 
@@ -204,30 +227,5 @@ class IndexLogic extends Logic
     }
 
 
-    private function saveOneToMany(Array $data,Model $model,String $ref,\Closure $beforeInsert ,\Closure $updater = null,$pk = 'id'){
 
-        if($updater){
-            $model->load($ref);
-            foreach($model->$ref as $r){
-                $flag = 0;
-                foreach($data as $k => $v){
-                    if(isset($v[$pk]) && $r->$pk === $v[$pk]){
-                        $updater && call_user_func_array($updater,[$r,$v,$model]);
-                        unset($data[$k]);
-                        $flag = 1;
-                        break;
-                    }
-                }
-                if($r->isDirty()){
-                    $r->save();
-                }else if(!$flag){
-                    $r->delete();
-                }
-            }
-        }
-        if(!empty($data)){
-            $insert = call_user_func_array($beforeInsert,[$data,$model]);
-            $model->$ref()->createMany($insert);
-        }
-    }
 }

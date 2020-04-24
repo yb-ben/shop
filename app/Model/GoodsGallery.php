@@ -5,13 +5,15 @@ namespace App\Model;
 use App\Model\Base;
 
 class GoodsGallery extends Base{
+
+    use \App\Model\Relations\Image;
+
     public $timestamps = false;
 
-    protected $table = 'goods_gallery';
-    protected $fillable = ['goods_id','url','file_id'];
- 
 
-    public function getUrlFullAttribute(){
-        return env('APP_URL').$this->url;
-    }
+
+    protected $table = 'goods_gallery';
+    protected $fillable = ['goods_id','image_id'];
+
+
 }

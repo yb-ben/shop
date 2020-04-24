@@ -9,11 +9,12 @@ trait CartRelations{
 
 
     public function goods(){
-        return $this->belongsTo(Goods::class,'goods_id');
+        return $this->belongsTo(Goods::class,'goods_id')
+            ;
     }
 
-
     public function spec(){
-        return $this->belongsTo(GoodsSpec::class,'spec_id');
+        return $this->belongsTo(GoodsSpec::class,'spec_id')
+           ;
     }
 }

@@ -4,7 +4,9 @@ namespace App\Http\Logic\Cart;
 
 use App\Model\Cart;
 use App\Model\Goods;
+use App\Model\GoodsSpec;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class IndexLogic
@@ -13,29 +15,36 @@ class IndexLogic
     public function addToCart(int $user_id,int  $goods_id,int  $count = 1,?int $spec_id = null):void
     {
 
-        DB::transaction(function () {
+        DB::transaction(function ()use($user_id,$goods_id,$count,$spec_id) {
 
-            $goods = Goods::findOrFail($goods_id);
-            $spec = $spec_id ? $goods->spec()->findOrFail($spec_id) : null;
+            if(!Goods::searchStatus(1)->where('id',$goods_id)->count()){
+                throw new \Exception('该商品不存在或已下架');
+            }
 
-            $cart = Cart::where('user_id', $user_id)
-                ->where('goods_id', $goods_id)
-                ->where('spec_id', $spec_id)
-                ->first();
+            if($spec_id){
+                if(!GoodsSpec::where('goods_id',$goods_id)->where('id',$spec_id)->count()){
+                    throw new \Exception('该商品规格不存在');
+                }
+
+                $cart = Cart::where('user_id', $user_id)
+                    ->where('goods_id', $goods_id)
+                    ->where('spec_id', $spec_id)
+                    ->first();
+            }else{
+
+                $cart = Cart::where('user_id', $user_id)
+                    ->where('goods_id', $goods_id)
+                    ->first();
+            }
 
             if ($cart) {
-                $cart->increament('count', $count);
+                $cart->increment('count', $count);
             } else {
                 Cart::create([
                     'user_id' => $user_id,
                     'goods_id' => $goods_id,
                     'spec_id' => $spec_id,
-                    'title' => $goods->title,
-                    'main_image' => $goods->main_image,
-                    'price' => $spec ? $spec->price : $goods->price,
-                    'line_price' => $goods->line_price,
                     'count' => $count,
-                    'spu' => $spec ? $spec->sku_text : null,
                 ]);
             }
         });
@@ -55,8 +64,7 @@ class IndexLogic
     {
         try {
 
-            DB::transaction(function () {
-                $goods = Goods::findOrFail($goods_id);
+            DB::transaction(function ()use($user_id,$cart_id,$count) {
 
                 $cart = Cart::select(['id','count'])->where('user_id',$user_id)->where('id',$cart_id)->firstOrFail();
                 $ret = $cart->whereRaw("count >= $count+1")->decreament('count', $count);
@@ -87,10 +95,12 @@ class IndexLogic
     public function modifyCount(int $user_id,int $cart_id,int $count):void{
         try {
 
-            DB::transaction(function () {
-                $goods = Goods::findOrFail($goods_id);
+            DB::transaction(function ()use($user_id,$cart_id,$count) {
 
-                $cart = Cart::select(['id','count'])->where('user_id',$user_id)->where('id',$cart_id)->firstOrFail();
+                $cart = Cart::select(['id','count'])
+                    ->where('user_id',$user_id)
+                    ->where('id',$cart_id)
+                    ->firstOrFail();
                 $cart->count = $count;
                 $cart->save();
             });
@@ -115,7 +125,28 @@ class IndexLogic
      */
     public function removeCartItem(int $user_id,array $ids):void
     {
-            Cart::where('user_id',$user_id)->delete($ids);
+            Cart::where('user_id',$user_id)->whereIn('id',$ids)->delete();
     }
 
+
+    public function calculate(Array $ids,$user_id){
+        $carts = Cart::select(['id', 'goods_id', 'spec_id', 'count'])
+            ->whereIn('id',$ids)
+            ->where('user_id',$user_id)
+            ->with(['spec'=>function($query){
+                return $query->select(['id','price']);
+            },'goods'=>function($query){
+                return $query->select(['id','price']);
+            }])->get();
+
+        $totalPrice = 0;
+        foreach ($carts as $cart){
+            if($cart->spec){
+                $totalPrice += $cart->spec->price * $cart->count;
+            }else{
+                $totalPrice += $cart->goods->price * $cart->count;
+            }
+        }
+        return $totalPrice;
+    }
 }

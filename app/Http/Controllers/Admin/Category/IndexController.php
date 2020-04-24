@@ -7,6 +7,7 @@ use App\Http\Logic\Category\IndexLogic;
 use App\Model\GoodsCategory;
 use App\Utils\Response;
 use Huyibin\Struct\Tree;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller{
@@ -16,7 +17,12 @@ class IndexController extends Controller{
     public function tree(Request $request){
 
         $model = new GoodsCategory;
-        $data = $model->orderby('sort')->select(['id','name','sort','parent_id','status','path'])->get()->toArray();
+        $data = $model
+            ->withImage()
+            ->orderby('sort')
+            ->select(['id','name','sort','parent_id','status','path','image_id'])
+            ->get()
+            ->toArray();
         if('tree' === $request->input('type','tree')){
             $data = Tree::tree($data,[],'parent_id','children');
         }
@@ -47,16 +53,19 @@ class IndexController extends Controller{
     public function delete($id){
 
         if(GoodsCategory::where('parent_id',$id)->count()){
-            return Response::apiError();    
+            return Response::apiError();
         }
         GoodsCategory::find($id)->delete();
-        return Response::api();    
+        return Response::api();
     }
 
     //详情
     public function detail($id){
 
-        $model = GoodsCategory::find($id);
-        return Response::api($model);    
+        $model = GoodsCategory::image()
+            ->select(['id','name','sort','parent_id','status','path','image_id','level','path'])
+            ->find($id);
+        $model->append(['path_array']);
+        return Response::api($model);
     }
 }

@@ -13,6 +13,11 @@ class IndexController extends Controller
 
 
     public function info(){
-        return Response::api(Auth::id());
+        $user= Auth::user();
+        $user->name;
+        return Response::api([
+            'name'=>$user->name,
+            'id'=>$user->id,
+            'avatar' => 'http://shop.com:8777/image/user_default_avatar.jpg']);
     }
 }

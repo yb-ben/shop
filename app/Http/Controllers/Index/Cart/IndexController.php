@@ -7,18 +7,53 @@ use App\Http\Logic\Cart\IndexLogic;
 use App\Http\Requests\Index\Cart\AddRequest;
 use App\Http\Requests\Index\Cart\ModifyRequest;
 use App\Http\Requests\Index\Cart\RemoveRequest;
+use App\Model\Cart;
 use App\Utils\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Model\User;
-
-class IndexController extends Controller{
 
 
-    protected  $user;
+class IndexController extends Controller
+{
 
-    public function __construct()
+    /**
+     * 购物车列表
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function list(Request $request)
     {
-        $this->user = Auth::guard('api')->user();
+
+        $carts = Cart::select(['id', 'goods_id', 'spec_id', 'count'])
+            ->user(Auth::id())
+            ->with(['spec'=>function($query){
+               return $query->select(['id','sku','price']);
+            },'goods'=>function($query){
+                return $query->select(['id','title','image_id','status','price','line_price'])->withImage();
+            }])
+            ->simplePaginate($request->input('limit', 10));
+
+
+        foreach ( $carts->getCollection() as $item){
+            $item->goods->append(['image_url'])->makeHidden(['image','image_id']);
+            $item->spec && $item->spec->append(['sku_text'])->makeHidden(['sku']);
+        }
+
+        return Response::api([
+            'data' => $carts->getCollection(),
+            'current_page' => $carts->currentPage(),
+            'more' => $carts->hasMorePages()
+        ]);
+    }
+
+    /**
+     * 购物车数量
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function count()
+    {
+        $count = Cart::user(Auth::id())->count();
+        return Response::api($count);
     }
 
     /**
@@ -27,10 +62,12 @@ class IndexController extends Controller{
      * @param AddRequest $request
      * @return void
      */
-    public function add(AddRequest $request){
-
+    public function add(AddRequest $request)
+    {
+        $user = Auth::user();
         $data = $request->validated();
-        app(); IndexLogic::addToCart($this->user->id,$data['goods_id'],$data['count'],$data['spec_id']);
+        $logic = new IndexLogic;
+        $logic->addToCart($user->getAuthIdentifier(), $data['goods_id'], $data['count'], $data['spec_id']);
         return Response::api();
     }
 
@@ -41,10 +78,11 @@ class IndexController extends Controller{
      * @param ModifyRequest $request
      * @return void
      */
-    public function modify(ModifyRequest $request){
-
+    public function modify(ModifyRequest $request)
+    {
         $data = $request->validated();
-        IndexLogic::modifyCount($this->user->id,$data['card_id'],$data['count']);
+        $logic = new IndexLogic;
+        $logic->modifyCount(Auth::id(), $data['cart_id'], $data['count']);
         return Response::api();
     }
 
@@ -54,10 +92,25 @@ class IndexController extends Controller{
      * @param RemoveRequest $request
      * @return void
      */
-    public function remove(RemoveRequest $request){
-
+    public function remove(RemoveRequest $request)
+    {
         $data = $request->validated();
-        IndexLogic::removeCartItem($this->user->id,$data['ids']);
+        $logic = new IndexLogic;
+        $logic->removeCartItem(Auth::id(), $data['ids']);
         return Response::api();
     }
+
+    /**
+     * * 计算购物车价格
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function calculate(Request $request){
+
+        $ids = $request->input('ids',[]);
+        $totalPrice = (new IndexLogic())->calculate($ids,Auth::id());
+        return Response::api(['totalPrice'=>$totalPrice]);
+    }
+
+
 }

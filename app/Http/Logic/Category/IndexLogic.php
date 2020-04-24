@@ -15,25 +15,22 @@ class IndexLogic{
     public function add($data){
 
         return DB::transaction(function()use($data){
-            $pid = intval($data['parent_id']);
-       
-            if($pid){          
-                $parent = GoodsCategory::where('id',$pid)->first();
+
+
+            if(!empty($data['parent_id'])){
+                $parent = GoodsCategory::where('id',$data['parent_id'])->first();
                 if($parent){
                     $cate =  GoodsCategory::create(array_merge($data,['parent_id' => $data['parent_id'],'path' => $parent->path.'-'.$data['parent_id']]));
-                 
-                }else{
-                    throw new \Exception('找不到改父分类');
-            
+
                 }
             }else{
                 $cate = GoodsCategory::create($data);
             }
             if(!empty($data['attrs'])){
-                $cate->attrs()->createMany($data['attrs']);   
+                $cate->attrs()->createMany($data['attrs']);
             }
             return $cate;
-    
+
         });
 
     }
@@ -41,14 +38,18 @@ class IndexLogic{
     //修改分类
     public function edit($id,$data){
         return DB::transaction(function()use($id,$data){
-            $model = GoodsCategory::with(['attrs'])->find($id);
+            $model = GoodsCategory::find($id);
             if(!$model){
                 throw new Exception('找不到该分类');
             }
-            $model->fill($data)->save();
+            $model->name = $data['name'];
+            $model->image_id = $data['image_id'];
+            $model->status = $data['status'];
+            $model->sort = $data['sort'];
+            $model->isDirty() && $model->save();
             return $model;
         });
-       
+
     }
 
 }

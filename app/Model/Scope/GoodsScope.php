@@ -6,28 +6,24 @@ namespace App\Model\Scope;
 trait GoodsScope{
 
 
-    
+
 
     public function scopeSearchStatus($query,$status){
         $status = intval($status);
-       
+
         switch($status){
-            
+
             case 0:
                 //未上架
                 return $query->where('status',0)
-                    ->orWhere(function($query){
-                        $query->where('status',1)
-                            ->where('up_at','>',time())
-                        ;
-                    })
+
                 ;
             break;
-            
+
             case 1:
                 //已上架
                return $query->where('status',1)
-                    ->where('up_at','<',time());
+                    ;
             break;
 
             case 2:
@@ -49,14 +45,14 @@ trait GoodsScope{
             if($e){
                 $query->where('price','<=',$e);
             }
-            
+
         }
         return $query;
     }
 
     public function scopeSearchCategory($query, $cate_id){
-        $cate_id = intval($cate_id);
-        return empty($cate_id)?$query: $query->where('cate_id',$cate_id);
+
+        return $cate_id? $query->where('cate_id',$cate_id):$query;
     }
 
     public function scopeSearchKw($query, $kw){
