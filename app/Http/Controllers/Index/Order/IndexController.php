@@ -33,8 +33,8 @@ class IndexController extends Controller
 
         $post = $request->validated();
         $logic = new OrderLogic(new OrderGoodsLogic($post,Auth::user()));
-        $id = $logic->createOrder();
-        return Response::api(['id' => $id]);
+        $ret = $logic->createOrder();
+        return Response::api(['id' => $ret->id]);
     }
 
 
