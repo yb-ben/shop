@@ -14,8 +14,13 @@ class IndexController extends Controller{
 
     public function index(){
 
-        dispatch(new ExpireOrder('1'))->delay(60)->afterResponse();
-        dispatch(new Test())->delay(60)->afterResponse();
+        dispatch(new ExpireOrder('1'))
+            ->delay(60)
+            ->onConnection('redis')
+            ->onQueue('default');
+        dispatch(new Test())->delay(60)
+            ->onConnection('redis')
+            ->onQueue('default');
         return Response::api();
     }
 
