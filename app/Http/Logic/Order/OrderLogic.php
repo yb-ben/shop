@@ -70,7 +70,7 @@ class OrderLogic
         $id = date('YmdHis');
         for($i = 0 ;$i<16; $i++){
             $p = random_int(0,rand())%10;
-            $id .= $str{$p};
+            $id .= mb_substr($str,$p,1);
         }
         return $id;
     }
