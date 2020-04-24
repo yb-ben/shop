@@ -17,7 +17,7 @@ class IndexController extends Controller{
         dispatch(new ExpireOrder('1'))
             ->delay(60)
             ->onConnection('redis')
-            ->onQueue('default');
+            ->onQueue('order');
         dispatch(new Test())->delay(60)
             ->onConnection('redis')
             ->onQueue('default');
