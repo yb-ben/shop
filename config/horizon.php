@@ -160,7 +160,7 @@ return [
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default','test_job'],
+                'queue' => ['default','order'],
                 'balance' => 'simple',
                 'processes' => 3,
                 'tries' => 1,
