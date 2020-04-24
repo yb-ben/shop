@@ -1142,12 +1142,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yb-ben/Library.git",
-                "reference": "e670c7e109961ada2c0143c549dadd3d29622134"
+                "reference": "36b5f5fdd9d7594f02d0e14f385f98a2e85c9b90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yb-ben/Library/zipball/e670c7e109961ada2c0143c549dadd3d29622134",
-                "reference": "e670c7e109961ada2c0143c549dadd3d29622134",
+                "url": "https://api.github.com/repos/yb-ben/Library/zipball/36b5f5fdd9d7594f02d0e14f385f98a2e85c9b90",
+                "reference": "36b5f5fdd9d7594f02d0e14f385f98a2e85c9b90",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1177,7 +1177,7 @@
                 }
             ],
             "description": "My common PHP library.",
-            "time": "2020-04-13T09:00:06+00:00"
+            "time": "2020-04-24T04:23:57+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
