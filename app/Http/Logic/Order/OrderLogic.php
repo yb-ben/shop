@@ -61,7 +61,11 @@ class OrderLogic
 
 
     private function fireAfterCreate($order){
-       ExpireOrder::dispatch($order->id)->delay(60)->onQueue('order')->afterResponse();
+       dispatch(new ExpireOrder($order->id))
+           ->onConnection('redis')
+           ->onQueue('order')
+           ->delay($this->expireTime)
+           ->afterResponse();
     }
 
     private function getId(){
