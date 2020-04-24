@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::group(['namespace' => 'user','prefix' => 'user'], function () {
+Route::group(['namespace' => 'User','prefix' => 'user'], function () {
 
     Route::post('login', 'LoginController@login'); //登录
     Route::post('register/code','LoginController@registerByCode');//验证码登录
@@ -29,20 +29,20 @@ Route::group(['namespace' => 'user','prefix' => 'user'], function () {
 });
 
 //分类
-Route::group(['namespace'=>'category','prefix'=>'category'],function(){
+Route::group(['namespace'=>'Category','prefix'=>'category'],function(){
 
     Route::get('tree','IndexController@tree');//分类列表
 });
 
 //商品
-Route::group(['namespace'=>'goods','prefix'=>'goods'],function(){
+Route::group(['namespace'=>'Goods','prefix'=>'goods'],function(){
     Route::get('lists','IndexController@lists');
     Route::get('detail/{id}','IndexController@detail');
 
 });
 
 //购物车
-Route::group(['namespace'=>'cart','prefix' => 'cart','middleware' => ['testAuth:test']],function(){
+Route::group(['namespace'=>'Cart','prefix' => 'cart','middleware' => ['testAuth:test']],function(){
     Route::post('add','IndexController@add');//添加购物车
     Route::post('modify','IndexController@modify');
     Route::post('remove','IndexController@remove');
@@ -51,7 +51,7 @@ Route::group(['namespace'=>'cart','prefix' => 'cart','middleware' => ['testAuth:
 });
 
 //订单相关
-Route::group(['namespace'=>'order','prefix'=>'order','middleware'=>['testAuth:test']],function(){
+Route::group(['namespace'=>'Order','prefix'=>'order','middleware'=>['testAuth:test']],function(){
    Route::post('calculate','IndexController@calculate'); //计算价格并检查商品状态
     Route::post('submit','IndexController@submit');//购物车下单
 });
