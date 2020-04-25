@@ -34,3 +34,7 @@ Route::group(['prefix' => 'test'], function () {
 
 
 Route::get('/sms/vcode','VerificationCodeController@code');//消息验证码
+
+Route::group(['prefix' =>'alipay','namespace'=>'Payment'],function(){
+    Route::get('/notify','AlipayController@notify');
+});

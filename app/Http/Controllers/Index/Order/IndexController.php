@@ -28,13 +28,16 @@ class IndexController extends Controller
         return Response::api(['items' => $items ,'totalPrice' => round(intval($totalPrice/100),2)]);
     }
 
-
+    /**
+     * 下单
+     * @param SubmitFromCart $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function submit(SubmitFromCart $request){
-
         $post = $request->validated();
         $logic = new OrderLogic(new OrderGoodsLogic($post,Auth::user()));
         $ret = $logic->createOrder();
-        return Response::api(['id' => $ret->id]);
+        return Response::api(['id' => $ret->id,'expire'=>$logic->getExpireTime()]);
     }
 
 

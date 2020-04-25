@@ -27,6 +27,10 @@ class OrderLogic
     }
 
 
+    public function getExpireTime(){
+        return $this->expireTime;
+    }
+
     public function createOrder(){
 
         $ret =  DB::transaction(function(){
