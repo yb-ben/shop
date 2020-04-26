@@ -53,7 +53,8 @@ class OrderGoodsLogic implements OrderLogicInterface
         $this->goodsInfo = Goods::whereIn('id', $ids)
             ->with([
                 'specs' => function ($query) use($spec_ids){
-                    return $query->select(['id','goods_id','sku','price','count','updated_at'])->whereIn('id',$spec_ids);
+                    return $query->select(['id','goods_id','sku','price','count','updated_at'])
+                        ->whereIn('id',$spec_ids);
                 }])
             ->select(['id', 'price', 'title', 'image_id', 'line_price','status','count','updated_at'])
             ->get()
@@ -69,6 +70,9 @@ class OrderGoodsLogic implements OrderLogicInterface
     {
         $totalPrice = 0;
         $pointer = null;
+
+
+
         foreach ($this->goodsInfo as $goods){
 
             $pointer =  &$this->data['data'][$goods->id];
@@ -76,8 +80,7 @@ class OrderGoodsLogic implements OrderLogicInterface
             if($goods->status !== 1){
                 throw new \Exception('部分商品已失效，请刷新');
             }
-
-            if(!empty($goods->specs)){
+             if(!empty($goods->specs) && !empty($goods->specs[0])){
 
                 $totalPrice += intval($goods->specs[0]->price) * 100 * $pointer['count'];
 
@@ -108,7 +111,7 @@ class OrderGoodsLogic implements OrderLogicInterface
             ->append(['image_url'])
             ->makeHidden(['image_id','image','status','count','updated_at']);
         foreach ($this->goodsInfo as $item){
-            empty($item->specs) || $item->specs[0]->append(['sku_text'])->makeHidden(['sku','count','updated_at']);
+            empty($item->specs) || empty($item->specs[0]) || $item->specs[0]->append(['sku_text'])->makeHidden(['sku','count','updated_at']);
             $item->setAttribute( 'submit_count',$this->data['data'][$item->id]['count']);
         }
         return $this->goodsInfo;

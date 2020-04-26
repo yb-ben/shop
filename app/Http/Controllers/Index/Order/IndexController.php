@@ -37,7 +37,10 @@ class IndexController extends Controller
         $post = $request->validated();
         $logic = new OrderLogic(new OrderGoodsLogic($post,Auth::user()));
         $ret = $logic->createOrder();
-        return Response::api(['id' => $ret->id,'expire'=>$logic->getExpireTime()]);
+        return Response::api([
+            'id' => $ret->id,
+            'expire'=>$logic->getExpireTime()
+        ]);
     }
 
 
