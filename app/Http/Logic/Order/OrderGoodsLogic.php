@@ -132,9 +132,9 @@ class OrderGoodsLogic implements OrderLogicInterface
                 'title' => $item->title,
                 'image_url' => $item->image_url,
                 'goods_id' => $item->id,
-                'sku_text' => ($item->specs && $item->specs[0])?$item->specs[0]->append(['sku_text'])->sku_text:null,
+                'sku_text' => ($item->specs && !empty($item->specs[0]))?$item->specs[0]->append(['sku_text'])->sku_text:null,
                 'count' => $item->submit_count,
-                'price' => (($item->specs && $item->specs[0])?$item->specs[0]->price:$item->price)*100,
+                'price' => (($item->specs && !empty($item->specs[0]))?$item->specs[0]->price:$item->price)*100,
                 'created_at' => $time
              ];
         }
@@ -144,7 +144,7 @@ class OrderGoodsLogic implements OrderLogicInterface
         }
         foreach ($goodsInfo as $item){
              //修改库存
-            if($item->specs && $item->specs[0]){
+            if($item->specs && !empty($item->specs[0])){
                 $item->specs[0]->count -=  $item->submit_count;
                 $rt = $item->specs[0]
                     ->where('id',$item->specs[0]->id)
