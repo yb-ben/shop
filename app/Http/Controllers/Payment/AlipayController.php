@@ -50,13 +50,13 @@ class AlipayController extends Controller
     public function wap(Request $request){
 
         $order_id= $request->post('order_id');
-        throw_if(empty($order_id),\Exception::class,['参数错误']);
+        throw_if(empty($order_id),new \Exception('参数错误'));
 
         $order = Order::where('user_id',Auth::id())
             ->select(['id','status','total_price'])
             ->find($order_id);
-        throw_if(empty($order_id),\Exception::class,['找不到该订单']);
-        throw_if(empty($order->status !== 0),\Exception::class,['订单状态已变化']);
+        throw_if(empty($order_id),new \Exception('找不到该订单'));
+        throw_if(empty($order->status !== 0),new \Exception('订单状态已变化'));
         return Pay::alipay()->wap([
             'out_trade_no'=>$order->id,
             'total_amount'=>$order->total_price,
