@@ -56,7 +56,7 @@ class AlipayController extends Controller
             ->select(['id','status','total_price'])
             ->find($order_id);
         throw_if(empty($order_id),new \Exception('找不到该订单'));
-        throw_if(empty($order->status !== 0),new \Exception('订单状态已变化'));
+        throw_if($order->status !== 0,new \Exception('订单状态已变化'));
         return Pay::alipay()->wap([
             'out_trade_no'=>$order->id,
             'total_amount'=>$order->total_price,
