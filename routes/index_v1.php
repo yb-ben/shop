@@ -54,5 +54,7 @@ Route::group(['namespace'=>'Cart','prefix' => 'cart','middleware' => ['testAuth:
 Route::group(['namespace'=>'Order','prefix'=>'order','middleware'=>['testAuth:test']],function(){
    Route::post('calculate','IndexController@calculate'); //计算价格并检查商品状态
     Route::post('submit','IndexController@submit');//购物车下单
+
 });
+
 

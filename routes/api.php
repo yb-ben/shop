@@ -35,6 +35,14 @@ Route::group(['prefix' => 'test'], function () {
 
 Route::get('/sms/vcode','VerificationCodeController@code');//消息验证码
 
-Route::group(['prefix' =>'alipay','namespace'=>'Payment'],function(){
-    Route::get('/notify','AlipayController@notify');
+Route::group(['namespace'=>'Payment'],function(){
+    Route::group(['prefix' =>'alipay'],function(){
+        Route::get('/notify','AlipayController@notify');//支付宝回调
+        Route::post('/wap','AlipayController@wap');//手机网站支付
+
+    });
+
+    Route::group(['prefix'=>'payment'],function(){
+       Route::get('/methods','IndexController@methods');//支付方式
+    });
 });
