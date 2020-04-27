@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Payment;
 use App\Http\Controllers\Controller;
 use App\Model\Order;
 use App\Utils\Format;
+use App\Utils\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,7 @@ class AlipayController extends Controller
     /**
      * 手机网站支付
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return false|string
      * @throws \Throwable
      */
     public function wap(Request $request){
@@ -57,11 +58,11 @@ class AlipayController extends Controller
             ->find($order_id);
         throw_if(empty($order_id),new \Exception('找不到该订单'));
         throw_if($order->status !== 0,new \Exception('订单状态已变化'));
-        return Pay::alipay()->wap([
+        return Response::api(Pay::alipay()->wap([
             'out_trade_no'=>$order->id,
             'total_amount'=>$order->total_price,
             'subject' => 'test'
-        ]);
+        ])->getContent());
     }
 
 
