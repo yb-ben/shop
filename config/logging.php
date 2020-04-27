@@ -99,6 +99,10 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'alipay_notify' => [
+            'path'=>storage_path('logs/alipay_notify.log')
+        ]
     ],
 
 ];

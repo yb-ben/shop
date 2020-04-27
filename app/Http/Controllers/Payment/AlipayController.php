@@ -22,6 +22,8 @@ class AlipayController extends Controller
         $alipay = Pay::alipay();
         $data= $alipay->verify();
         $data = $data->toArray();
+
+        Log::channel('alipay_notify')->info('Alipay notify',$data);
         try{
 
             DB::transaction(function ()use($data){
@@ -38,7 +40,6 @@ class AlipayController extends Controller
         }catch (\Throwable $t){
             return $t->getMessage();
         }
-        Log::debug('Alipay notify',$data);
         return $alipay->success();
     }
 
