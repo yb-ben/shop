@@ -60,7 +60,7 @@ class AlipayController extends Controller
         throw_if($order->status !== 0,new \Exception('订单状态已变化'));
         return Response::api(Pay::alipay()->wap([
             'out_trade_no'=>$order->id,
-            'total_amount'=>$order->total_price,
+            'total_amount'=> Format::moneyHuman($order->total_price),
             'subject' => 'test'
         ])->getContent());
     }
