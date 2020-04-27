@@ -32,7 +32,7 @@ class AlipayController extends Controller
 
             $data =  $alipay->verify($d)->toArray();
 
-            Log::channel('alipay_notify')->info('Alipay notify ',var_export($data,true));
+            Log::channel('alipay_notify')->info('Alipay notify '.var_export($data,true));
 
             DB::transaction(function ()use($data){
 
