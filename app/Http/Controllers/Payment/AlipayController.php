@@ -62,7 +62,8 @@ class AlipayController extends Controller
         return Response::api(Pay::alipay()->wap([
             'out_trade_no'=>$order->id,
             'total_amount'=> Format::moneyHuman($order->total_price),
-            'subject' => 'test'
+            'subject' => 'test',
+            'return_url'=>$request->getHost().'/#/order/result?oid='.$order->id
         ])->getContent());
     }
 
