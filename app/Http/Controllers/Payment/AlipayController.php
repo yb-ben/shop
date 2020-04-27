@@ -73,11 +73,8 @@ class AlipayController extends Controller
             $data = $request->except(['_url']);
             Log::channel('alipay_notify')->info('Alipay sync '.var_export($data,true));
 
-             Pay::alipay();
-            if(!Support::verifySign($data,true)){
-                Events::dispatch(new Events\SignFailed('Alipay', '', $data));
-                throw new InvalidSignException('Alipay Sign Verify FAILED');
-            }
+             $data = Pay::alipay()->verify($data)->toArray();
+
 
 
             DB::transaction(function ()use($data){
