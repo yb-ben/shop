@@ -52,7 +52,7 @@ class AlipayController extends Controller
         }catch (\Throwable $t){
             return $t->getMessage();
         }
-        return $alipay->success();
+        return 'success';
     }
 
     /**
