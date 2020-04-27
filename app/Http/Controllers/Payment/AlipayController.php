@@ -17,6 +17,7 @@ use Yansongda\Pay\Events;
 use Yansongda\Pay\Exceptions\InvalidConfigException;
 use Yansongda\Pay\Exceptions\InvalidSignException;
 use Yansongda\Pay\Gateways\Alipay\Support;
+use Yansongda\Supports\Config;
 
 class AlipayController extends Controller
 {
@@ -72,8 +73,12 @@ class AlipayController extends Controller
             $data = $request->except(['_url']);
             Log::channel('alipay_notify')->info('Alipay sync '.var_export($data,true));
 
-            $alipay = Pay::alipay();
-            $data =  $alipay->verify($data)->toArray();
+             Pay::alipay();
+            if(!Support::verifySign($data,true)){
+                Events::dispatch(new Events\SignFailed('Alipay', '', $data));
+                throw new InvalidSignException('Alipay Sign Verify FAILED');
+            }
+
 
             DB::transaction(function ()use($data){
 
