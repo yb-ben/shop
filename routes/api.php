@@ -37,7 +37,9 @@ Route::get('/sms/vcode','VerificationCodeController@code');//消息验证码
 
 Route::group(['namespace'=>'Payment'],function(){
     Route::group(['prefix' =>'alipay'],function(){
-        Route::get('/notify','AlipayController@notify');//支付宝回调
+        Route::post('/notify','AlipayController@notify');//支付宝回调
+        Route::get('/sync','AlipayController@sync');//支付宝回调
+
         Route::post('/wap','AlipayController@wap');//手机网站支付
 
     });

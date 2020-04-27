@@ -13,46 +13,95 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yansongda\LaravelPay\Facades\Pay;
+use Yansongda\Pay\Events;
 use Yansongda\Pay\Exceptions\InvalidConfigException;
 use Yansongda\Pay\Exceptions\InvalidSignException;
+use Yansongda\Pay\Gateways\Alipay\Support;
 
 class AlipayController extends Controller
 {
     //异步回调
-    public function notify()
+    public function notify(Request $request)
     {
         Log::channel('alipay_notify')->info('Alipay notify start');
 
         $alipay = Pay::alipay();
         try {
-            $data = $alipay->verify();
-        } catch (InvalidConfigException $e) {
-            Log::channel('alipay_notify')->info('Alipay notify config',$e->getMessage());
+            $d = $request->post();
+            Log::channel('alipay_notify')->info('Alipay notify ',$d);
 
-        } catch (InvalidSignException $e) {
-            Log::channel('alipay_notify')->info('Alipay notify sign',$e->getMessage());
-        }
-        $data = $data->toArray();
+            $data =  $alipay->verify($d)->toArray();
 
-        Log::channel('alipay_notify')->info('Alipay notify',$data);
-
-         try{
 
             DB::transaction(function ()use($data){
 
                 $order = Order::find($data['trade_out_no']);
                 throw_if(empty($order),\Exception::class,['订单不存在']);
                 throw_if($order->total_price !== Format::moneyHuman(floatval($order['total_amount'])),\Exception::class,['订单金额不一致']);
+                if($order->status === 1){
+                    return ;
+                }
                 $order->status = 1;
                 $order->method = 1;
                 $order->paid_at = time();
                 $order->save();
 
             });
+        } catch (InvalidConfigException $e) {
+            Log::channel('alipay_notify')->info('Alipay notify config '.$e->getMessage());
+
+        } catch (InvalidSignException $e) {
+            Log::channel('alipay_notify')->info('Alipay notify sign '.$e->getMessage());
+            return 'false';
         }catch (\Throwable $t){
-            return $t->getMessage();
+            Log::channel('alipay_notify')->info('Alipay notify exception '.$t->getMessage());
+
+            return 'false';
         }
-        return 'success';
+        return $alipay->success();
+    }
+
+
+    //同步回调
+    public function sync(Request $request)
+    {
+        Log::channel('alipay_notify')->info('Alipay sync start');
+
+        try {
+            $data = $request->all();
+            Log::channel('alipay_notify')->info('Alipay sync ',$data);
+
+            if(!Support::verifySign($data,true)){
+                Events::dispatch(new Events\SignFailed('Alipay', '', $data));
+                throw new InvalidSignException('Alipay Sign Verify FAILED');
+            }
+
+
+            DB::transaction(function ()use($data){
+
+                $order = Order::find($data['trade_out_no']);
+                throw_if(empty($order),\Exception::class,['订单不存在']);
+                throw_if($order->total_price !== Format::moneyHuman(floatval($order['total_amount'])),\Exception::class,['订单金额不一致']);
+                if($order->status === 1){
+                    return ;
+                }
+                $order->status = 1;
+                $order->method = 1;
+                $order->paid_at = time();
+                $order->save();
+
+            });
+        } catch (InvalidConfigException $e) {
+            Log::channel('alipay_notify')->info('Alipay sync config '.$e->getMessage());
+            return Response::apiError([],$e->getMessage());
+
+        } catch (InvalidSignException $e) {
+            Log::channel('alipay_notify')->info('Alipay sync sign '.$e->getMessage());
+            return Response::apiError([],$e->getMessage());
+        }catch (\Throwable $t){
+            return Response::apiError([],$t->getMessage());
+        }
+        return Response::api([],'success');
     }
 
     /**
@@ -75,7 +124,7 @@ class AlipayController extends Controller
             'out_trade_no'=>$order->id,
             'total_amount'=> Format::moneyHuman($order->total_price),
             'subject' => 'test',
-            'return_url'=>$request->getSchemeAndHttpHost().'/#/order/result?oid='.$order->id
+            'return_url'=> env('APP_CLIENT_SERVER').'/#/order/result?oid='.$order->id
         ])->getContent());
     }
 

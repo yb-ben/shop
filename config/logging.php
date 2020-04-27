@@ -101,6 +101,7 @@ return [
         ],
 
         'alipay_notify' => [
+            'driver' => 'single',
             'path'=>storage_path('logs/alipay_notify.log')
         ]
     ],
