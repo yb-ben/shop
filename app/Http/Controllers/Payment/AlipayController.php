@@ -13,18 +13,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yansongda\LaravelPay\Facades\Pay;
+use Yansongda\Pay\Exceptions\InvalidConfigException;
+use Yansongda\Pay\Exceptions\InvalidSignException;
 
 class AlipayController extends Controller
 {
     //异步回调
     public function notify()
     {
+        Log::channel('alipay_notify')->info('Alipay notify start');
+
         $alipay = Pay::alipay();
-        $data= $alipay->verify();
+        try {
+            $data = $alipay->verify();
+        } catch (InvalidConfigException $e) {
+            Log::channel('alipay_notify')->info('Alipay notify config',$e->getMessage());
+
+        } catch (InvalidSignException $e) {
+            Log::channel('alipay_notify')->info('Alipay notify sign',$e->getMessage());
+        }
         $data = $data->toArray();
 
         Log::channel('alipay_notify')->info('Alipay notify',$data);
-        try{
+
+         try{
 
             DB::transaction(function ()use($data){
 
@@ -63,7 +75,7 @@ class AlipayController extends Controller
             'out_trade_no'=>$order->id,
             'total_amount'=> Format::moneyHuman($order->total_price),
             'subject' => 'test',
-            'return_url'=>$request->getHost().'/#/order/result?oid='.$order->id
+            'return_url'=>$request->getSchemeAndHttpHost().'/#/order/result?oid='.$order->id
         ])->getContent());
     }
 
