@@ -93,14 +93,16 @@ class AlipayController extends Controller
 
             });
         } catch (InvalidConfigException $e) {
-            Log::channel('alipay_notify')->info('Alipay sync config '.$e->getMessage());
-            return Response::apiError([],$e->getMessage());
-
+            //Log::channel('alipay_notify')->info('Alipay sync config '.$e->getMessage());
+            //return Response::apiError([],$e->getMessage());
+            throw $e;
         } catch (InvalidSignException $e) {
-            Log::channel('alipay_notify')->info('Alipay sync sign '.$e->getMessage());
-            return Response::apiError([],$e->getMessage());
+            //Log::channel('alipay_notify')->info('Alipay sync sign '.$e->getMessage());
+            //return Response::apiError([],$e->getMessage());
+            throw $e;
         }catch (\Throwable $t){
-            return Response::apiError([],$t->getMessage());
+            //return Response::apiError([],$t->getMessage());
+            throw $t;
         }
         return Response::api([],'success');
     }
