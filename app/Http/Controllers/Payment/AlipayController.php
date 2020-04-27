@@ -36,7 +36,7 @@ class AlipayController extends Controller
 
             DB::transaction(function ()use($data){
 
-                $order = Order::find($data['trade_out_no']);
+                $order = Order::find($data['out_trade_no']);
                 throw_if(empty($order),\Exception::class,['订单不存在']);
                 throw_if($order->total_price !== Format::moneyHuman(floatval($order['total_amount'])),\Exception::class,['订单金额不一致']);
                 if($order->status === 1){
