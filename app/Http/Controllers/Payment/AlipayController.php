@@ -126,7 +126,7 @@ class AlipayController extends Controller
             'out_trade_no'=>$order->id,
             'total_amount'=> Format::moneyHuman($order->total_price),
             'subject' => 'test',
-            'return_url'=> env('APP_CLIENT_SERVER').'/#/order/result?oid='.$order->id
+            'return_url'=> env('APP_CLIENT_SERVER').'/#/order/result'
         ])->getContent());
     }
 
