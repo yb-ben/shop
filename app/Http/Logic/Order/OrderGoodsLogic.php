@@ -123,14 +123,14 @@ class OrderGoodsLogic implements OrderLogicInterface
         $goodsInfo = $this->getGoodsInfo()->load(['image'=>function($query){
             $query->baseSelect();
         }]);
-        $goodsInfo->append(['image_url']);
+      //  $goodsInfo->append(['image_url']);
 
         foreach ($goodsInfo as $item){
 
             $inserts[] = [
                 'order_id' => $order_id,
                 'title' => $item->title,
-                'image_url' => $item->image_url,
+                'image_url' => $item->fn,
                 'goods_id' => $item->id,
                 'sku_text' => ($item->specs && !empty($item->specs[0]))?$item->specs[0]->append(['sku_text'])->sku_text:null,
                 'count' => $item->submit_count,

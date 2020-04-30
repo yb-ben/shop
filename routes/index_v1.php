@@ -24,6 +24,12 @@ Route::group(['namespace' => 'User','prefix' => 'user'], function () {
             Route::post('delete/{id}','AddrController@delete');
             Route::get('default','AddrController@default');
         });
+
+
+        //订单
+        Route::group(['prefix'=>'order'],function(){
+           Route::get('someCount','OrderController@someCount');
+        });
     });
 
 });
@@ -54,7 +60,9 @@ Route::group(['namespace'=>'Cart','prefix' => 'cart','middleware' => ['testAuth:
 Route::group(['namespace'=>'Order','prefix'=>'order','middleware'=>['testAuth:test']],function(){
    Route::post('calculate','IndexController@calculate'); //计算价格并检查商品状态
     Route::post('submit','IndexController@submit');//购物车下单
-
+    Route::get('payment/info','IndexController@getOrderPaymentInfo');//付款信息
+    Route::get('list','IndexController@list');//订单列表
+    Route::get('del/{id}','IndexController@del');//删除订单
 });
 
 

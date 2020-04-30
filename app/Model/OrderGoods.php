@@ -23,4 +23,8 @@ class OrderGoods extends Base
         'price',
         'created_at','updated_at','deleted_at'
     ];
+
+    public function getImageUrlAttribute($value){
+        return env('APP_IMAGE_SERVER').$value;
+    }
 }
