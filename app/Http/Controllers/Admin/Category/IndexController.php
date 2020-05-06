@@ -62,9 +62,12 @@ class IndexController extends Controller{
     //详情
     public function detail($id){
 
-        $model = GoodsCategory::image()
+        $model = GoodsCategory::withImage()
             ->select(['id','name','sort','parent_id','status','path','image_id','level','path'])
             ->find($id);
+        if(empty($model)){
+            return Response::apiError();
+        }
         $model->append(['path_array']);
         return Response::api($model);
     }
