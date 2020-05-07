@@ -130,7 +130,7 @@ class OrderGoodsLogic implements OrderLogicInterface
             $inserts[] = [
                 'order_id' => $order_id,
                 'title' => $item->title,
-                'image_url' => $item->fn,
+                'image_url' => $item->image->fn,
                 'goods_id' => $item->id,
                 'sku_text' => ($item->specs && !empty($item->specs[0]))?$item->specs[0]->append(['sku_text'])->sku_text:null,
                 'count' => $item->submit_count,

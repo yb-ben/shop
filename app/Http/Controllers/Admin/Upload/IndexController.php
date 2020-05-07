@@ -33,7 +33,7 @@ class IndexController extends Controller{
             'url' => $path,
         ]);
 
-        return Response::api(['file_id' => $uploadFile->id ,'path' => $path,'path_full' => env('APP_URL').$path]);
+        return Response::api(['file_id' => $uploadFile->id ,'path' => $path,'path_full' => env('APP_IMAGE_SERVER').$path]);
     }
 
     //多图片上传

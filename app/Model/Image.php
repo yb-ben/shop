@@ -27,6 +27,6 @@ class Image extends UploadFile
 
     //图片全路径
     public function getUrlFullAttribute(){
-        return env('APP_IMAGE_SERVER').$this->fn;
+        return env('APP_IMAGE_SERVER').$this->url;
     }
 }

@@ -16,7 +16,7 @@ class Calculate extends StoreBase
             'data' => ['required','array'],
             'data.*.goods_id' => ['required','integer'],
             'data.*.spec_id' => ['nullable','integer'],
-            'data.*.count' => ['required','integer']
+            'data.*.count' => ['required','integer','min:1']
         ];
     }
 

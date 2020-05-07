@@ -17,7 +17,7 @@ class SubmitFromCart extends StoreBase
             'data' => ['required','array'],
             'data.*.goods_id'=>['required','integer'],
             'data.*.spec_id' => ['nullable','integer'],
-            'data.*.count' => ['required','integer'],
+            'data.*.count' => ['required','integer','min:1','max:50'],
             'data.*.cart_id' =>  ['integer']
         ];
     }

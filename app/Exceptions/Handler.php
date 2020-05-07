@@ -61,7 +61,11 @@ class Handler extends ExceptionHandler
         if($exception instanceof UnauthenticatedException){
             return Response::apiError($exception->getMessage(),400);
         }
+        return Response::apiError($exception->getMessage());
 
-        return parent::render($request, $exception);
+//        if($exception instanceof ApiException){
+//            return Response::apiError($exception->getMessage());
+//        }
+       // return parent::render($request, $exception);
     }
 }
